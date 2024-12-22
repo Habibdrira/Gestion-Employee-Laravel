@@ -34,7 +34,7 @@
             <tbody>
                 @forelse($demandes as $demande)
                 <tr>
-                    <td>{{ $demande->employee ? $demande->employee->employeeId : 'Non assigné' }}</td>
+                    <td>{{ $demande->employee ? $demande->employee->employee_id : 'Non assigné' }}</td>
                     <td>{{ $demande->employee ? $demande->employee->nbrjconge : '0' }} jours</td>
                     <td>{{ $demande->date_debut ? \Carbon\Carbon::parse($demande->date_debut)->format('d/m/Y') : 'N/A' }}</td>
                     <td>{{ $demande->date_fin ? \Carbon\Carbon::parse($demande->date_fin)->format('d/m/Y') : 'N/A' }}</td>

@@ -23,6 +23,10 @@ use App\Http\Controllers\HomeController;
 
 
 
+
+use App\Http\Controllers\LoanController;
+
+
 Route::prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class,'index'])->middleware(['auth', 'verified'])->name('admin.dashboard');
 
@@ -46,7 +50,7 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 
     // Gestion des employés
     Route::prefix('gereEmpl')->name('gereEmpl.')->group(function () {
-        Route::get('/index', [EmployeeController::class, 'index_1'])->name('index');
+        Route::get('/index', [EmployeeController::class, 'indexAdmin'])->name('index');
         Route::get('/create', [EmployeeController::class, 'create'])->name('create');
         Route::post('/', [EmployeeController::class, 'store'])->name('store');
         Route::get('/{employee_id}/edit', [EmployeeController::class, 'edit'])->name('edit');
@@ -87,3 +91,22 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
         Route::put('absences/{id}', [AbsenceController::class, 'update'])->name('absences.update'); // Route de mise à jour
         Route::delete('absences/{id}', [AbsenceController::class, 'destroy'])->name('absences.destroy'); // Route de suppression
     });
+
+
+    Route::middleware('auth')->group(function () {
+    //// jihenne 
+
+        // Administration des prêts (Admin)
+        Route::prefix('admin/loans')->name('admin.loans.')->group(function () {
+            Route::get('/', [LoanController::class, 'adminIndex'])->name('index');
+            Route::post('/{loan}/approve', [LoanController::class, 'approve'])->name('approve');
+            Route::post('/{loan}/reject', [LoanController::class, 'reject'])->name('reject');
+    
+            // Historique des prêts
+            Route::get('/history', [LoanController::class, 'loanHistory'])->name('history');
+    
+            // Téléchargement CSV des prêts
+            Route::get('/downloadCSV', [LoanController::class, 'downloadCSV'])->name('downloadCSV');
+        });
+    });
+    

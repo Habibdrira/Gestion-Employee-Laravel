@@ -7,6 +7,8 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Employee\DemandeCongeController;
 
 
+use App\Http\Controllers\LoanController;
+
 
 
 
@@ -37,14 +39,29 @@ Route::prefix('employee')->group(function () {
 
 // donia 
 // Dashboard Employee
-
+/*
 // Gestion des congés pour les utilisateurs
 Route::middleware('auth')->prefix('employee')->name('employee.')->group(function () {
     Route::get('/demande-conge/create', [DemandeCongeController::class, 'create'])->name('demande_conge.create');
-    Route::get('/demande-conge', [DemandeCongeController::class, 'index'])->name('demande_conge.index');
-    Route::post('/demande-conge', [DemandeCongeController::class, 'store'])->name('demande_conge.store');
+    Route::get('/demande-conge/index', [DemandeCongeController::class, 'index'])->name('demande_conge.index');
+    Route::post('/demande-conge/store', [DemandeCongeController::class, 'store'])->name('demande_conge.store');
 });
+*/
 
+// Dashboard Employee
+Route::middleware('auth')->prefix('employee')->name('employee.')->group(function () {
+    // Afficher le formulaire de demande de congé
+    Route::get('/demande-conge/create', [DemandeCongeController::class, 'create'])->name('demande_conge.create');
+    
+    // Afficher la liste des demandes de congé
+    Route::get('/demande-conge/index', [DemandeCongeController::class, 'index'])->name('demande_conge.index');
+    
+    // Enregistrer une nouvelle demande de congé
+    Route::post('/demande-conge/store', [DemandeCongeController::class, 'store'])->name('demande_conge.store');
+    
+    // Mettre à jour le statut de la demande de congé
+    Route::put('/demande-conge/update-status/{id}', [DemandeCongeController::class, 'updateStatus'])->name('demande_conge.updateStatus');
+});
 
 
 
@@ -81,3 +98,15 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::delete('/missions/local/{id}', [LocalMissionController::class, 'destroy'])->name('local_missions.destroy');
 
 
+
+
+
+    /////// jihenne 
+
+
+        // Routes des prêts pour les utilisateurs
+        Route::prefix('loans')->name('loans.')->group(function () {
+            Route::get('/', [LoanController::class, 'index'])->name('index'); // Liste des prêts
+            Route::get('/create', [LoanController::class, 'create'])->name('create'); // Formulaire de création de prêt
+            Route::post('/', [LoanController::class, 'store'])->name('store'); // Soumettre une nouvelle demande de prêt
+        });

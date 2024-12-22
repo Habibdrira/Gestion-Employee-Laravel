@@ -13,16 +13,15 @@ return new class extends Migration
     {
         Schema::create('employees', function (Blueprint $table) {
             $table->id('employee_id'); // Clé primaire
-            $table->unsignedBigInteger('idU')->unique(); // Clé étrangère vers 'users'
-            $table->string('address')->nullable(); // Adresse de l'employé
-            $table->string('city')->nullable(); // Ville de l'employé
-            $table->string('position')->nullable(); // Poste de l'employé
-            $table->decimal('salary', 8, 2)->nullable(); // Salaire
-            $table->string('status', 100)->default('inactive'); // Statut de l'employé
-            $table->timestamps(); // Horodatage (created_at, updated_at)
+            $table->unsignedBigInteger('user_id')->unique(); // Clé étrangère vers 'users'
+            $table->string('address')->nullable();
+            $table->string('city')->nullable();
+            $table->string('position')->nullable();
+            $table->decimal('salary', 8, 2)->nullable();
+            $table->timestamps();
 
             // Définir la relation de clé étrangère
-            $table->foreign('idU')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
         });
     }
 

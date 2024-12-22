@@ -17,48 +17,16 @@ class Employee extends Model
 
     // Les attributs qui peuvent être assignés en masse
     protected $fillable = [
-        'idU', 'address', 'city', 'position', 'salary', 'status',
+        'user_id', 'address', 'city', 'position', 'salary',
     ];
 
     /**
      * Relation avec le modèle User.
-     * Un employé appartient à un utilisateur (user).
+     * Un employé appartient à un utilisateur.
      */
     public function user()
     {
-        return $this->belongsTo(User::class, 'idU', 'id');
-    }
-}
-
-
-/*
-
-<?php
-
-namespace App\Models;
-
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Notifications\Notifiable;
-
-class Employee extends Model
-{
-    use HasFactory;
-    use Notifiable;
-
-
-    protected $fillable = [
-        'employee_id',
-        'name',
-        'city',
-        'address',
-        'position',
-        'salary',
-    ];
-
-    public function user()
-    {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
     public function absences()
@@ -76,5 +44,3 @@ class Employee extends Model
         return $this->hasMany(InternationalMission::class);
     }
 }
-
-*/
