@@ -4,9 +4,7 @@
 
 `copy .env.example .env`
 
-## For Mac / Linux OS
 
-`cp .env.example .env`
 
 ### Configure your .env file as per your requirements
 
@@ -18,3 +16,4 @@ After migration, you should create a user by opening the Laravel app in your bro
 
 `npm install`
 `npm run build`
+
