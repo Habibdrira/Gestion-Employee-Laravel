@@ -14,8 +14,8 @@ return new class extends Migration
     Schema::create('demande_conges', function (Blueprint $table) {
         $table->id('id_conge');
         $table->unsignedBigInteger('employee_id'); // FK vers la table 'employee'
-        $table->date('date_debut')->change();
-        $table->date('date_fin')->change();
+        $table->date('date_debut');
+        $table->date('date_fin');
         $table->string('type', 30);
         $table->string('commentaire', 100);
         $table->string('statut', 30);

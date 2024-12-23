@@ -16,7 +16,7 @@ class Performance extends Model
 
     protected $fillable = [
         'employee_id',
-        'data',
+        'date',
         'rating', 
     ];
 

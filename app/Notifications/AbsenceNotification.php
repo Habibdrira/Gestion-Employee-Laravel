@@ -28,9 +28,9 @@ class AbsenceNotification extends Notification
         return ['database']; // Storing in the database
     }
 
-    /**
-     * Get the array representation of the notification.
-     */
+    /*
+      Get the array representation of the notification.
+     
     public function toArray($notifiable)
     {
         return [
@@ -40,4 +40,24 @@ class AbsenceNotification extends Notification
             'duration' => $this->absence->duration,
         ];
     }
+       */
+        public function toArray($notifiable)
+{
+    if ($this->absence === null) {
+        return [
+            'message' => "Aucune absence définie.",
+            'date' => null,
+            'reason' => null,
+            'duration' => null,
+        ];
+    }
+
+    return [
+        'message' => "Une nouvelle absence a été ajoutée pour le {$this->absence->date}.",
+        'date' => $this->absence->date,
+        'reason' => $this->absence->reason,
+        'duration' => $this->absence->duration,
+    ];
+}
+
 }
