@@ -28,11 +28,30 @@ class AbsenceController extends Controller
             'employee_id' => $request->employee_id,
         ]);
 
+
         // Envoyer la notification pour l'ajout de l'absence
         $employee = $absence->employee;
         $employee->user->notify(new AbsenceNotification($absence, 'added')); // "added" pour une nouvelle absence
 
         return redirect()->route('admin.absences')->with('success', 'Absence ajoutée avec succès');
+
+        // Notify the employee if they have a user associated with them
+       // $employee = Employee::findOrFail($request->employee_id);
+       //$employee = Employee::with('user')->get();
+        //if ($employee->user) {
+           // $employee->user->notify(new AbsenceNotification($absence));  // This should trigger the notification
+       // }
+        // Récupérer l'employé par son employee_id
+        $employee = Employee::where('employee_id', $request->employee_id)->with('user')->first();
+
+        if ($employee && $employee->user) {
+            // Notifier l'utilisateur
+            $employee->user->notify(new AbsenceNotification($request->absence));
+        }
+
+
+        return redirect()->route('admin.absences.absences')->with('success', 'Absence ajoutée et notification envoyée.');
+
     }
 
 

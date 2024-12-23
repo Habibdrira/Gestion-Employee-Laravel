@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('content')
 <div class="container">
@@ -18,7 +18,9 @@
 
     <!-- Lien vers l'historique des prêts -->
     <div class="mb-4">
-        <a href="{{ route('admin.loans.history') }}" class="btn btn-info">Historique des prêts</a>
+        <a href="{{ route('admin.loans.history') }}" class="btn btn-info">
+            <i class="fas fa-history"></i> Historique des prêts
+        </a>
     </div>
 
     <!-- Liste des prêts en attente -->
@@ -28,8 +30,8 @@
             Aucun prêt en attente.
         </div>
     @else
-        <table class="table table-striped">
-            <thead>
+        <table class="table table-striped table-hover">
+            <thead class="thead-dark">
                 <tr>
                     <th scope="col">Nom de l'utilisateur</th>
                     <th scope="col">Montant</th>
@@ -41,28 +43,33 @@
             <tbody>
                 @foreach ($loans as $loan)
                     <tr>
-                        <td>{{ $loan->user ? $loan->user->name : 'Utilisateur non trouvé' }}</td>
-                        <td>{{ $loan->amount }} Dinar</td>
+                        <td>{{ $loan->user->name ?? 'Utilisateur non trouvé' }}</td>
+                        <td>{{ number_format($loan->amount, 2, ',', ' ') }} Dinar</td>
                         <td>{{ $loan->reason ?: 'Aucune raison spécifiée' }}</td>
                         <td>
                             <span class="badge
                                 @if($loan->status == 'pending') badge-warning
                                 @elseif($loan->status == 'approved') badge-success
                                 @elseif($loan->status == 'rejected') badge-danger
+                                @else badge-secondary
                                 @endif">
                                 {{ ucfirst($loan->status) }}
                             </span>
                         </td>
                         <td>
                             @if ($loan->status == 'pending')
-                            <form action="{{ route('admin.loans.approve', $loan) }}" method="POST" class="d-inline">
-                                @csrf
-                                <button type="submit" class="btn btn-success btn-sm">Approuver</button>
-                            </form>
-                            <form action="{{ route('admin.loans.reject', $loan) }}" method="POST" class="d-inline">
-                                @csrf
-                                <button type="submit" class="btn btn-danger btn-sm">Rejeter</button>
-                            </form>
+                                <form action="{{ route('admin.loans.approve', $loan) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir approuver ce prêt ?')">
+                                        Approuver
+                                    </button>
+                                </form>
+                                <form action="{{ route('admin.loans.reject', $loan) }}" method="POST" class="d-inline">
+                                    @csrf
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir rejeter ce prêt ?')">
+                                        Rejeter
+                                    </button>
+                                </form>
                             @else
                                 <span class="text-muted">Aucune action possible</span>
                             @endif
@@ -71,7 +78,6 @@
                 @endforeach
             </tbody>
         </table>
-
     @endif
 </div>
 @endsection

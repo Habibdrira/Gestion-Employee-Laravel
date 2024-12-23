@@ -106,10 +106,11 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" class="text-center fw-bold text-muted">Aucune demande de congé trouvée.</td>
+                        <td colspan="4" class="text-center">Aucune demande de congé trouvée.</td>
                     </tr>
                 @endforelse
             </tbody>
+            
         </table>
     </div>
 </div>

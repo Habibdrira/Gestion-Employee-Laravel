@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('admin.layouts.app')
 
 @section('content')
 <div class="container">
@@ -19,11 +19,11 @@
     <!-- Affichage des prêts approuvés et rejetés -->
     @if ($loans->isEmpty())
         <div class="alert alert-info" role="alert">
-            Aucun prêt approuvé ou rejeté.
+            Aucun prêt approuvé ou rejeté pour le moment.
         </div>
     @else
-        <table class="table table-striped">
-            <thead>
+        <table class="table table-striped table-hover">
+            <thead class="thead-dark">
                 <tr>
                     <th scope="col">Nom de l'utilisateur</th>
                     <th scope="col">Montant</th>
@@ -35,13 +35,14 @@
             <tbody>
                 @foreach ($loans as $loan)
                     <tr>
-                        <td>{{ $loan->user ? $loan->user->name : 'Utilisateur non trouvé' }}</td>
-                        <td>{{ $loan->amount }} Dinar</td>
+                        <td>{{ $loan->user->name ?? 'Utilisateur non trouvé' }}</td>
+                        <td>{{ number_format($loan->amount, 2, ',', ' ') }} Dinar</td>
                         <td>{{ $loan->reason ?: 'Aucune raison spécifiée' }}</td>
                         <td>
                             <span class="badge
                                 @if($loan->status == 'approved') badge-success
                                 @elseif($loan->status == 'rejected') badge-danger
+                                @else badge-secondary
                                 @endif">
                                 {{ ucfirst($loan->status) }}
                             </span>
@@ -51,10 +52,13 @@
                 @endforeach
             </tbody>
         </table>
-        <div class="mb-4">
-            <a href="{{ route('admin.loans.downloadCSV') }}" class="btn btn-secondary">Télécharger l'historique en CSV</a>
-        </div>
 
+        <!-- Bouton pour télécharger le CSV -->
+        <div class="mb-4">
+            <a href="{{ route('admin.loans.downloadCSV') }}" class="btn btn-secondary">
+                <i class="fas fa-file-download"></i> Télécharger l'historique en CSV
+            </a>
+        </div>
     @endif
 </div>
 @endsection

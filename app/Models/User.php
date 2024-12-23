@@ -84,15 +84,6 @@ class User extends Authenticatable
         return $this->hasMany(InternationalMission::class);
     }
 
-
-    public function employee()
-    {
-        return $this->hasOne(Employee::class, 'user_id');
-    }
-
-
-
-
     /**
      * Récupérer les utilisateurs avec le rôle spécifié.
      */
@@ -102,5 +93,17 @@ class User extends Authenticatable
             $query->where('name', $roleName);
         })->get();
     }
+
+    // Dans le modèle User
+public function fichePaies()
+{
+    return $this->hasMany(FichePaie::class);
+}
+public function employee()
+{
+    return $this->hasOne(Employee::class, 'user_id', 'id');
+}
+
+
 
 }

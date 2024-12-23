@@ -15,6 +15,11 @@ use App\Http\Controllers\Admin\AbsenceController;
 use App\Http\Controllers\MissionInternationalleController;
 use App\Http\Controllers\LocalMissionController;
 
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
+use Illuminate\Support\Facades\Gate;
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\Admin\PerformanceController;
 
 
 
@@ -95,6 +100,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::middleware('auth')->group(function () {
     //// jihenne
 
+
         // Administration des prêts (Admin)
         Route::prefix('admin/loans')->name('admin.loans.')->group(function () {
             Route::get('/', [LoanController::class, 'adminIndex'])->name('index');
@@ -108,3 +114,51 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
             Route::get('/downloadCSV', [LoanController::class, 'downloadCSV'])->name('downloadCSV');
         });
     });
+
+     // Administration des prêts (Admin)
+Route::prefix('admin/loans')->name('admin.loans.')->group(function () {
+    // Route pour les prêts en attente
+    Route::get('/pending', [LoanController::class, 'pending'])->name('pending');
+
+    Route::get('/', [LoanController::class, 'adminIndex'])->name('index');
+    Route::post('/{loan}/approve', [LoanController::class, 'approve'])->name('approve');
+    Route::post('/{loan}/reject', [LoanController::class, 'reject'])->name('reject');
+
+    // Historique des prêts
+    Route::get('/history', [LoanController::class, 'loanHistory'])->name('history');
+
+    // Téléchargement CSV des prêts
+    Route::get('/downloadCSV', [LoanController::class, 'downloadCSV'])->name('downloadCSV');
+});
+
+    });
+
+   
+    Route::prefix('admin')->group(function () {
+        Route::get('/performances', [PerformanceController::class, 'index'])->name('performances.index');
+        Route::get('/performances/create', [PerformanceController::class, 'create'])->name('performances.create');
+        Route::post('/performances', [PerformanceController::class, 'store'])->name('performances.store');
+        Route::get('/performances/{id}', [PerformanceController::class, 'show'])->name('performances.show');
+        Route::delete('/performances/{id}', [PerformanceController::class, 'destroy'])->name('performances.destroy');
+    });
+
+  */  
+
+
+  /// admi primes 
+  
+  use App\Http\Controllers\PrimeController;
+
+
+  
+  Route::prefix('admin')->name('admin.')->middleware('auth')->group(function() {
+      // Afficher les employés
+      Route::get('primes/index', [PrimeController::class, 'index'])->name('primes.index');
+      
+      // Formulaire pour créer une prime
+      Route::get('primes/create', [PrimeController::class, 'create'])->name('primes.create');
+      
+      // Enregistrer une prime
+      Route::post('primes', [PrimeController::class, 'store'])->name('primes.store');
+  });
+

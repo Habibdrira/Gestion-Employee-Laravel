@@ -24,7 +24,14 @@ class AbsenceNotification extends Notification
         return ['database'];  // On envoie uniquement dans la base de données
     }
 
+
     public function toDatabase($notifiable)
+
+    /*
+      Get the array representation of the notification.
+     
+    public function toArray($notifiable)
+
     {
         $actionMessage = $this->action === 'added'
             ? "Une nouvelle absence a été ajoutée pour " . $this->absence->employee->user->name
@@ -36,5 +43,26 @@ class AbsenceNotification extends Notification
             'message' => $actionMessage,
         ];
     }
+
+       
+        public function toArray($notifiable)
+{
+    if ($this->absence === null) {
+        return [
+            'message' => "Aucune absence définie.",
+            'date' => null,
+            'reason' => null,
+            'duration' => null,
+        ];
+    }
+
+    return [
+        'message' => "Une nouvelle absence a été ajoutée pour le {$this->absence->date}.",
+        'date' => $this->absence->date,
+        'reason' => $this->absence->reason,
+        'duration' => $this->absence->duration,
+    ];
+}
+
 
 }
