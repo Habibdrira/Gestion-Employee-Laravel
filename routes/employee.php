@@ -21,6 +21,9 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\FichePaieController;
+use App\Http\Controllers\PrimeController;
+
 
 
 
@@ -37,7 +40,7 @@ Route::prefix('employee')->group(function () {
 
 
 
-// donia 
+// donia
 // Dashboard Employee
 /*
 // Gestion des congés pour les utilisateurs
@@ -52,13 +55,13 @@ Route::middleware('auth')->prefix('employee')->name('employee.')->group(function
 Route::middleware('auth')->prefix('employee')->name('employee.')->group(function () {
     // Afficher le formulaire de demande de congé
     Route::get('/demande-conge/create', [DemandeCongeController::class, 'create'])->name('demande_conge.create');
-    
+
     // Afficher la liste des demandes de congé
     Route::get('/demande-conge/index', [DemandeCongeController::class, 'index'])->name('demande_conge.index');
-    
+
     // Enregistrer une nouvelle demande de congé
     Route::post('/demande-conge/store', [DemandeCongeController::class, 'store'])->name('demande_conge.store');
-    
+
     // Mettre à jour le statut de la demande de congé
     Route::put('/demande-conge/update-status/{id}', [DemandeCongeController::class, 'updateStatus'])->name('demande_conge.updateStatus');
 });
@@ -101,7 +104,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
 
 
-    /////// jihenne 
+    /////// jihenne
 
 
         // Routes des prêts pour les utilisateurs
@@ -110,3 +113,9 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
             Route::get('/create', [LoanController::class, 'create'])->name('create'); // Formulaire de création de prêt
             Route::post('/', [LoanController::class, 'store'])->name('store'); // Soumettre une nouvelle demande de prêt
         });
+
+        Route::middleware('auth')->prefix('fichepaie')->name('fichepaie.')->group(function () {
+            Route::get('/fichepaies/salary/{employeeId}', [FichePaieController::class, 'salary'])->name('fichepaie.salary');
+            Route::get('/employee/fichepaies/download/{fichePaie}', [FichePaieController::class, 'download'])->name('download');
+        });
+

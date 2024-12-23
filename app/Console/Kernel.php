@@ -11,9 +11,19 @@ class Kernel extends ConsoleKernel
      * Define the application's command schedule.
      */
     protected function schedule(Schedule $schedule): void
-    {
-        // $schedule->command('inspire')->hourly();
-    }
+{
+    // Exécuter une commande artisan tous les jours à minuit
+    $schedule->command('my:custom-command')->daily();
+
+    // Nettoyer les fichiers temporaires chaque semaine
+    $schedule->call(function () {
+        // Votre logique ici
+    })->weekly();
+
+    // Exécuter une tâche chaque heure
+    $schedule->command('inspire')->hourly();
+}
+
 
     /**
      * Register the commands for the application.

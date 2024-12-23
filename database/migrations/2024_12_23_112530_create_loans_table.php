@@ -19,11 +19,16 @@ return new class extends Migration
                 $table->double('amount'); // Montant du prêt
                 $table->string('reason')->nullable(); // Raison du prêt
                 $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending'); // Statut du prêt
-                $table->foreignId('admin_id')->nullable()->constrained('admins')->onDelete('set null'); // Admin qui approuve/refuse
+
+                // Clé étrangère explicitement définie
+                $table->unsignedBigInteger('admin_id')->nullable();
+                $table->foreign('admin_id')->references('admin_id')->on('admins')->onDelete('set null');
+
                 $table->timestamps(); // Colonnes created_at et updated_at
             });
         }
     }
+
 
     /**
      * Reverse the migrations.
