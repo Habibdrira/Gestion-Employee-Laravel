@@ -71,7 +71,7 @@
                   
 
         </ul>
-    </li>
+        
 
 
 
@@ -88,16 +88,36 @@
 
             Liste des absences</a></li>
 
-        <li class="nav-item"><a class="nav-link" href="{{ route('admin.absences.create') }}">
-
-                <x-coreui-icon class="nav-icon" icon="cil-pen" />
-
-                crer absences </a></li>
-              
 
     </ul>
+
+    <li class="nav-group">
+        <a class="nav-link nav-group-toggle" href="#">
+            <x-coreui-icon class="nav-icon" icon="cil-pen" />
+            Gestion de Performance
+        </a>
+       
+    </li>
 </li>
    
+<li class="nav-group">
+    <a class="nav-link nav-group-toggle" href="#">
+        <x-coreui-icon class="nav-icon" icon="cil-pen" />
+        Gestion de Performance
+    </a>
+    <ul class="nav-group-items">
+        <li class="nav-item"><a class="nav-link" href="{{ route('admin.performances.index') }}">
+                <x-coreui-icon class="nav-icon" icon="cil-list" />
+                Liste des Performances
+            </a>
+        </li>
+        <li class="nav-item"><a class="nav-link" href="{{ route('admin.performances.create') }}">
+                <x-coreui-icon class="nav-icon" icon="cil-plus" />
+                Ajouter une Performance
+            </a>
+        </li>
+    </ul>
+</li>
 
 
     </ul>

@@ -14,8 +14,16 @@
                             <label for="employee_id" class="form-label">Employé</label>
                             <select name="employee_id" id="employee_id" class="form-control" required>
                                 @foreach($employees as $employee)
-                                    <option value="{{ $employee->id }}">{{ $employee->name }}</option>
-                                @endforeach
+        @if($employee->user) <!-- Vérifier que l'utilisateur existe -->
+            <option value="{{ $employee->employee_id }}">
+                {{ $employee->user->name }} {{ $employee->user->lastname }}
+            </option>
+        @else
+            <option value="{{ $employee->employee_id }}">
+                Employé non attribué à un utilisateur
+            </option>
+        @endif
+    @endforeach
                             </select>
                             @error('employee_id')
                                 <div class="text-danger">{{ $message }}</div>

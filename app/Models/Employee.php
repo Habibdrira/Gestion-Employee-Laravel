@@ -43,4 +43,8 @@ class Employee extends Model
     {
         return $this->hasMany(InternationalMission::class);
     }
+    public function demandesConge()
+    {
+        return $this->hasMany(DemandeConge::class, 'employee_id');
+    }
 }

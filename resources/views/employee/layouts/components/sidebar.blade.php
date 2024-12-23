@@ -39,18 +39,30 @@
 
                     Demander un Congé</a></li>
 
-                    <li class="nav-item"><a class="nav-link" href="{{ route('employee.demande_conge.index') }}">
+                    
+                       
+                    <li class="nav-group">
+                        <a class="nav-link nav-group-toggle" href="#">
+                            <x-coreui-icon class="nav-icon" icon="cil-chart-line" />
+                            Performance
+                        </a>
+                        <ul class="nav-group-items">
+                            
+                            <li class="nav-item"><a class="nav-link" href="{{ route('employee.performances.chart') }}">
+                                    <x-coreui-icon class="nav-icon" icon="cil-graph" />
+                                    Graphique de Performance
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                        
 
-                        <x-coreui-icon class="nav-icon" icon="cil-pen" />
-        
-                        Demander</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{{ route('employee.demande_conge.store') }}">
 
-                            <x-coreui-icon class="nav-icon" icon="cil-pen" />
-            
-                            store</a></li>
+                        
 
         </ul>
+
+        
     </li>
 
 

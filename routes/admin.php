@@ -20,7 +20,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\HomeController;
-
+use App\Http\Controllers\Admin\PerformanceController;
 
 
 
@@ -109,4 +109,14 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
             Route::get('/downloadCSV', [LoanController::class, 'downloadCSV'])->name('downloadCSV');
         });
     });
-    
+
+    //performances 
+   
+    Route::prefix('admin')->group(function () {
+        Route::get('/performances', [PerformanceController::class, 'index'])->name('performances.index');
+        Route::get('/performances/create', [PerformanceController::class, 'create'])->name('performances.create');
+        Route::post('/performances', [PerformanceController::class, 'store'])->name('performances.store');
+        Route::get('/performances/{id}', [PerformanceController::class, 'show'])->name('performances.show');
+        Route::delete('/performances/{id}', [PerformanceController::class, 'destroy'])->name('performances.destroy');
+    });
+  

@@ -9,13 +9,6 @@
     </div>
     <h2 class="text-center mb-4">Liste des Demandes de Congé</h2>
 
-    <!-- Message de succès -->
-    @if(session('success'))
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
 
     <!-- Tableau des demandes -->
     <div class="table-responsive">
