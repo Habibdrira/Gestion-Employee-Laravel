@@ -66,6 +66,7 @@
     <ul class="nav-group-items">
 
 
+
         <li class="nav-item">
             <a class="nav-link" href="{{ route('fichepaie.salary', ['employeeId' => auth()->user()->employee->employee_id]) }}">
                 <x-coreui-icon class="nav-icon" icon="cil-dollar" />
@@ -76,6 +77,33 @@
 
     </ul>
 </li>
+
+                    
+                       
+                    <li class="nav-group">
+                        <a class="nav-link nav-group-toggle" href="#">
+                            <x-coreui-icon class="nav-icon" icon="cil-chart-line" />
+                            Performance
+                        </a>
+                        <ul class="nav-group-items">
+                            
+                            <li class="nav-item"><a class="nav-link" href="{{ route('employee.performances.chart') }}">
+                                    <x-coreui-icon class="nav-icon" icon="cil-graph" />
+                                    Graphique de Performance
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                        
+
+
+                        
+
+        </ul>
+
+        
+    </li>
+
 
 
 

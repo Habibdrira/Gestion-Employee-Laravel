@@ -20,7 +20,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\HomeController;
-
+use App\Http\Controllers\Admin\PerformanceController;
 
 
 
@@ -113,3 +113,33 @@ Route::prefix('admin/loans')->name('admin.loans.')->group(function () {
 });
 
     });
+
+   
+    Route::prefix('admin')->group(function () {
+        Route::get('/performances', [PerformanceController::class, 'index'])->name('performances.index');
+        Route::get('/performances/create', [PerformanceController::class, 'create'])->name('performances.create');
+        Route::post('/performances', [PerformanceController::class, 'store'])->name('performances.store');
+        Route::get('/performances/{id}', [PerformanceController::class, 'show'])->name('performances.show');
+        Route::delete('/performances/{id}', [PerformanceController::class, 'destroy'])->name('performances.destroy');
+    });
+
+  */  
+
+
+  /// admi primes 
+  
+  use App\Http\Controllers\PrimeController;
+
+
+  
+  Route::prefix('admin')->name('admin.')->middleware('auth')->group(function() {
+      // Afficher les employés
+      Route::get('primes/index', [PrimeController::class, 'index'])->name('primes.index');
+      
+      // Formulaire pour créer une prime
+      Route::get('primes/create', [PrimeController::class, 'create'])->name('primes.create');
+      
+      // Enregistrer une prime
+      Route::post('primes', [PrimeController::class, 'store'])->name('primes.store');
+  });
+

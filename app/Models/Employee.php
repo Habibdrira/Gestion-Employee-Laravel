@@ -71,4 +71,11 @@ class Employee extends Model
             $employee->primes()->delete();
         });
     }
+
+    public function demandesConge()
+    {
+        return $this->hasMany(DemandeConge::class, 'employee_id');
+    }
 }
+
+

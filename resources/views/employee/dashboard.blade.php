@@ -857,8 +857,8 @@
                                             <div class="fw-semibold">22%</div>
                                         </div>
                                         <div class="float-end"><small
-                                                class="text-medium-emphasis">Jun 11, 2020 - Jul 10,
-                                                2020</small></div>
+                                                class="text-medium-emphasis">Dec 24, 2024 
+                                                </small></div>
                                     </div>
                                     <div class="progress progress-thin">
                                         <div class="progress-bar bg-info" role="progressbar"

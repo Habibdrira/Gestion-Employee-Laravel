@@ -14,7 +14,12 @@ class AdminDemandeCongeController extends Controller
 {
     public function conges()
     {
-        $demandes = DemandeConge::with('employee')->get(); // Charge la relation employee
+       
+       $demandes = DemandeConge::with('employee')->get(); // Charge la relation employee
+       if ($demandes->isEmpty()) {
+        // Handle no data scenario
+        $demandes = []; // or send a custom message
+    }
         return view('admin.demande_conge.conges', compact('demandes'));
     }
 

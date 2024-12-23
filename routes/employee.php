@@ -9,7 +9,7 @@ use App\Http\Controllers\Employee\DemandeCongeController;
 
 use App\Http\Controllers\LoanController;
 
-
+use App\Http\Controllers\Employee\PerformanceChartController;
 
 
 use App\Http\Controllers\StatusController;
@@ -67,7 +67,9 @@ Route::middleware('auth')->prefix('employee')->name('employee.')->group(function
 });
 
 
-
+ //performances 
+   
+ 
 
 // ajout de la route pour les employés
 Route::prefix('admin')->middleware(['auth'])->group(function () {
@@ -114,8 +116,15 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
             Route::post('/', [LoanController::class, 'store'])->name('store'); // Soumettre une nouvelle demande de prêt
         });
 
+
         Route::middleware('auth')->prefix('fichepaie')->name('fichepaie.')->group(function () {
             Route::get('/fichepaies/salary/{employeeId}', [FichePaieController::class, 'salary'])->name('fichepaie.salary');
             Route::get('/employee/fichepaies/download/{fichePaie}', [FichePaieController::class, 'download'])->name('download');
         });
+
+   
+  //performaces
+  Route::prefix('employee')->group(function () {
+    Route::get('/performance-chart', [PerformanceChartController::class, 'index'])->name('performance.chart');
+});
 

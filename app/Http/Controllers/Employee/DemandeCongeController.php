@@ -41,7 +41,7 @@ class DemandeCongeController extends Controller
             'commentaire' => $request->commentaire,
             'statut' => 'En attente',
         ]);
-
+        
         // Rediriger vers la liste des demandes de congé avec un message de succès
         return redirect()->route('employee.demande_conge.index')->with('success', 'Demande de congé soumise.');
     }
