@@ -8,20 +8,29 @@
                     <h4 class="text-white">Modifier une Absence</h4>
                 </div>
                 <div class="card-body">
-                    <form action="{{ route('admin.absences.update', $absence->id) }}" method="POST">
+                    <form action="{{ route('admin.admin.absences.update', $absence->id_absence) }}" method="POST">
                         @csrf
                         @method('PUT')
                         <div class="mb-3">
                             <label for="employee_id" class="form-label">Employé</label>
                             <select name="employee_id" id="employee_id" class="form-control" required>
+                                <option value="" disabled {{ !$absence->employee_id ? 'selected' : '' }}>-- Sélectionner un employé --</option>
                                 @foreach($employees as $employee)
-                                    <option value="{{ $employee->id }}"
-                                        {{ $employee->id == $absence->employee_id ? 'selected' : '' }}>
-                                        {{ $employee->name }}
+                                    <option value="{{ $employee->employee_id }}"
+                                        {{ $employee->employee_id == $absence->employee_id ? 'selected' : '' }}>
+                                        {{ $employee->user->name ?? 'Nom indisponible' }}
                                     </option>
                                 @endforeach
                             </select>
+
+
+                            @error('employee_id')
+                                <small class="text-danger">{{ $message }}</small>
+                            @enderror
+
                         </div>
+
+
                         <div class="mb-3">
                             <label for="date" class="form-label">Date</label>
                             <input type="date" name="date" id="date" class="form-control" value="{{ $absence->date }}" required>

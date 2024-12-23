@@ -69,8 +69,9 @@ class User extends Authenticatable
      */
     public function role()
     {
-        return $this->belongsTo(Role::class);
+        return $this->belongsTo(Role::class, 'role_id', 'role_id'); // Modifier la clé primaire si nécessaire
     }
+
 
 
     public function status()
@@ -101,4 +102,5 @@ class User extends Authenticatable
             $query->where('name', $roleName);
         })->get();
     }
+
 }

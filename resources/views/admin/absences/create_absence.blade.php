@@ -14,7 +14,7 @@
                             <label for="employee_id" class="form-label">Employé</label>
                             <select name="employee_id" id="employee_id" class="form-control" required>
                                 @foreach($employees as $employee)
-                                    <option value="{{ $employee->id }}">{{ $employee->name }}</option>
+                                    <option value="{{ $employee->employee_id }}">{{ $employee->user->name }}</option>
                                 @endforeach
                             </select>
                             @error('employee_id')

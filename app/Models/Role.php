@@ -14,6 +14,8 @@ class Role extends Model
 
     // Les attributs qui sont assignables en masse
     protected $fillable = ['name'];
+    protected $primaryKey = 'role_id';
+
 
     /**
      * Relation avec les utilisateurs (un rôle peut avoir plusieurs utilisateurs).

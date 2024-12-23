@@ -7,19 +7,14 @@ use App\Http\Controllers\Admin\ProfileAdminController;
 use App\Http\Controllers\Employee\EmployeeController;
 use App\Http\Controllers\Admin\AdminDemandeCongeController;
 use App\Http\Controllers\Admin\AdminCongeAnalyseController;
+use App\Http\Controllers\NotificationController;
 
 use App\Http\Controllers\Admin\AbsenceController;
 
 
-use App\Http\Controllers\StatusController;
-
-use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\MissionInternationalleController;
 use App\Http\Controllers\LocalMissionController;
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\DashboardController;
-use Illuminate\Support\Facades\Gate;
-use App\Http\Controllers\HomeController;
+
 
 
 
@@ -40,7 +35,7 @@ Route::prefix('admin')->group(function () {
 
 
 
-// donia 
+// donia
 
 
 // Routes Admin protégées par l'authentification
@@ -66,7 +61,11 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 
 
 
-
+Route::prefix('admin')->middleware(['auth'])->group(function () {
+    // Définir les routes pour les notifications administrateur
+    Route::get('/notifications', [NotificationController::class, 'adminShowNotifications'])->name('admin.notifications.show');
+    Route::get('/notifications/mark-all-read', [NotificationController::class, 'adminMarkAllAsRead'])->name('admin.notifications.markAllAsRead');
+});
 
     // Routes administrateur - Missions internationales
     Route::get('/admin/missions/international', [MissionInternationalleController::class, 'adminIndex'])->name('missions.international.admin.index');
@@ -88,25 +87,24 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
         Route::get('absences/create', [AbsenceController::class, 'create'])->name('absences.create');
         Route::post('absences', [AbsenceController::class, 'store'])->name('absences.store');
         Route::get('absences/{id}/edit', [AbsenceController::class, 'edit'])->name('absences.edit'); // Route d'édition
-        Route::put('absences/{id}', [AbsenceController::class, 'update'])->name('absences.update'); // Route de mise à jour
-        Route::delete('absences/{id}', [AbsenceController::class, 'destroy'])->name('absences.destroy'); // Route de suppression
+        Route::put('admin/absences/{id_absence}', [AbsenceController::class, 'update'])->name('admin.absences.update');
+        Route::delete('absences/{id_absence}', [AbsenceController::class, 'destroy'])->name('absences.destroy'); // Route de suppression
     });
 
 
     Route::middleware('auth')->group(function () {
-    //// jihenne 
+    //// jihenne
 
         // Administration des prêts (Admin)
         Route::prefix('admin/loans')->name('admin.loans.')->group(function () {
             Route::get('/', [LoanController::class, 'adminIndex'])->name('index');
             Route::post('/{loan}/approve', [LoanController::class, 'approve'])->name('approve');
             Route::post('/{loan}/reject', [LoanController::class, 'reject'])->name('reject');
-    
+
             // Historique des prêts
             Route::get('/history', [LoanController::class, 'loanHistory'])->name('history');
-    
+
             // Téléchargement CSV des prêts
             Route::get('/downloadCSV', [LoanController::class, 'downloadCSV'])->name('downloadCSV');
         });
     });
-    

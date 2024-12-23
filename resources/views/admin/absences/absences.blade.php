@@ -25,46 +25,36 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                @php
-                                    $images = [
-                                        'assets/img/team-1.jpg',
-                                        'assets/img/team-2.jpg',
-                                        'assets/img/team-3.jpg',
-                                        'assets/img/team-4.jpg',
-                                        'assets/img/team-5.jpg'
-                                    ];
-                                    $imageIndex = 0;
-                                @endphp
+
                                 @forelse ($absences as $absence)
                                     <tr class="{{ $loop->even ? 'table-secondary' : 'table-light' }}">
                                         <td>
                                             <div class="d-flex px-2 py-1">
                                                 <div>
-                                                    <img src="{{ asset($images[$imageIndex % count($images)]) }}" class="avatar avatar-sm me-3 border-radius-lg" alt="avatar">
                                                 </div>
                                                 <div class="d-flex flex-column justify-content-center">
-                                                    <h6 class="mb-0 text-sm">{{ $absence->employee->name ?? 'Inconnu' }}</h6>
+                                                    <h6 class="mb-0 text-sm">{{ $absence->employee->user->name ?? 'Inconnu' }}</h6>
                                                     <p class="text-xs text-secondary mb-0">{{ $absence->employee->email ?? '-' }}</p>
                                                 </div>
                                             </div>
                                         </td>
                                         <td class="text-center">{{ $absence->date }}</td>
                                         <td class="text-center">
-                                            <span class="badge bg-gradient-info">{{ $absence->duration }} hrs</span>
+                                            <span class="badge bg-dark">{{ $absence->duration }} hrs</span>
                                         </td>
                                         <td class="text-center">
-                                            <span class="badge bg-gradient-primary">{{ $absence->reason }}</span>
+                                            <span class="badge bg-dark">{{ $absence->reason }}</span>
                                         </td>
                                         <td class="text-center">
-                                            <a href="{{ route('admin.absences.edit', $absence->id) }}" class="btn btn-sm btn-primary">Modifier</a>
-                                            <form action="{{ route('admin.absences.destroy', $absence->id) }}" method="POST" style="display:inline-block;">
+                                            <a href="{{ route('admin.absences.edit', $absence->id_absence) }}" class="btn btn-sm btn-primary">Modifier</a>
+                                            <form action="{{ route('admin.absences.destroy', $absence->id_absence) }}" method="POST" style="display:inline-block;">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Voulez-vous vraiment supprimer cette absence ?')">Supprimer</button>
                                             </form>
                                         </td>
+
                                     </tr>
-                                    @php $imageIndex++; @endphp
                                 @empty
                                     <tr>
                                         <td colspan="5" class="text-center">Aucune absence enregistrée</td>

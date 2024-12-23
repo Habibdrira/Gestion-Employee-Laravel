@@ -31,13 +31,16 @@ class Employee extends Model
 
     public function absences()
     {
-        return $this->hasMany(Absence::class);
+        // Indiquez explicitement la clé étrangère et la clé primaire
+        return $this->hasMany(Absence::class, 'employee_id', 'employee_id');
     }
+
 
     public function localMissions()
     {
-        return $this->hasMany(LocalMission::class);
+        return $this->hasMany(LocalMission::class, 'employee_id', 'employee_id');
     }
+
 
     public function internationalMissions()
     {
