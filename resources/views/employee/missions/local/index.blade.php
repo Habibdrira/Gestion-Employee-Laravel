@@ -1,29 +1,55 @@
-@extends('layouts.app')
+@extends('employee.layouts.app')
 
 @section('content')
-    <h1 class="text-center my-4 text-success">Mes Missions Locales</h1>
+    <h1 class="text-center my-4 text-dark">Mes Demandes De Missions Locales</h1>
 
     <div class="table-responsive">
-        <table class="table table-bordered table-striped">
+        <div class="text-left mt-4">
+            <a href="{{ route('local_missions.create') }}" class="btn btn-primary" style="padding: 10px 20px; font-size: 16px;">
+                Créer une nouvelle mission
+            </a>
+        </div>
+        <table class="table table-bordered table-striped" style="width: 100%; font-size: 14px;">
             <thead class="thead-dark">
                 <tr>
-                    <th>ID Mission</th>
-                    <th>Région</th>
-                    <th>Objet</th>
-                    <th>Date Début</th>
-                    <th>Date Fin</th>
-                    <th>Statut</th>
-                    <th>Actions</th>
+                    <th style="width: 5%;">Région</th>
+                    <th style="width: 10%;">Objet</th>
+                    <th style="width: 8%;">Date Début</th>
+                    <th style="width: 8%;">Date Fin</th>
+
+                    <th style="width: 8%;">Car Type</th>
+                    <th style="width: 8%;">Fuel Type</th>
+                    <th style="width: 8%;">Carte Carburant</th>
+                    <th style="width: 8%;">Distance Traveled</th>
+                    <th style="width: 8%;">Fuel Cost</th>
+                    <th style="width: 8%;">Toll Expenses</th>
+                    <th style="width: 8%;">Hotel</th>
+                    <th style="width: 8%;">Indemnity</th>
+                    <th style="width: 8%;">Total Cost</th>
+                    <th style="width: 8%;">Statut</th>
+
+                    <th style="width: 10%;">Actions</th>
+
                 </tr>
             </thead>
             <tbody>
                 @forelse($missions as $mission)
                     <tr>
-                        <td>{{ $mission->mission_id }}</td>
                         <td>{{ $mission->region }}</td>
                         <td>{{ $mission->purpose }}</td>
                         <td>{{ $mission->start_date }}</td>
                         <td>{{ $mission->end_date }}</td>
+
+
+                        <td>{{ $mission->car_type }}</td>
+                        <td>{{ $mission->fuel_type }}</td>
+                        <td>{{ $mission->carte_carburant }}</td>
+                        <td>{{ $mission->distance_traveled }}</td>
+                        <td>{{ $mission->fuel_cost }}</td>
+                        <td>{{ $mission->toll_expenses }}</td>
+                        <td>{{ $mission->hotel }}</td>
+                        <td>{{ $mission->indemnity }}</td>
+                        <td>{{ $mission->total_cost }}</td>
                         <td>
                             @if($mission->status === 'Approved')
                                 <span class="badge bg-success">Approuvé</span>
@@ -47,17 +73,11 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="7" class="text-center">Aucune mission locale trouvée pour cet employé.</td>
+                        <td colspan="19" class="text-center">Aucune mission locale trouvée pour cet employé.</td>
                     </tr>
                 @endforelse
             </tbody>
         </table>
     </div>
 
-    <!-- Bouton pour créer une nouvelle mission -->
-    <div class="text-center mt-4">
-        <a href="{{ route('local_missions.create') }}" class="btn btn-primary" style="padding: 10px 20px; font-size: 16px;">
-            Créer une nouvelle mission
-        </a>
-    </div>
 @endsection

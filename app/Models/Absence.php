@@ -16,7 +16,7 @@ class Absence extends Model
 
     protected $fillable = [
         'employee_id',
-        'date', 
+        'date',
         'reason',
         'duration',
     ];
@@ -24,8 +24,10 @@ class Absence extends Model
     // Relation avec l'employé
     public function employee(): BelongsTo
     {
-        return $this->belongsTo(Employee::class, 'employee_id');
+        // Indiquez explicitement la clé étrangère et la clé primaire
+        return $this->belongsTo(Employee::class, 'employee_id', 'employee_id');
     }
+
 }
 
 

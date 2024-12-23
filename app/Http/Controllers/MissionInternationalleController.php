@@ -4,24 +4,132 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\InternationalMission;
+use App\Notifications\MissionStatusInternationnaleChanged;
+use App\Models\Employee;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 class MissionInternationalleController extends Controller
 {
     // Vue pour les utilisateurs
     public function userIndex()
     {
-        // Récupérer les missions de l'utilisateur connecté
-        $missions = InternationalMission::where('employee_id', 'EMPL001')->get(); // Remplacer par l'ID dynamique
+        $user = Auth::user();
 
-        return view('missions.international.user.index', compact('missions'));
+        // Récupérer les missions internationales associées à cet utilisateur
+        $missions = InternationalMission::where('user_id', $user->id)->get();
+            return view('employee.missions.international.user.index', compact('missions'));
     }
+
+    public function create()
+    {
+        return view('employee.missions.international.user.create');
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'mission_id' => 'required|unique:international_missions,mission_id',
+            'superviseur' => 'required|string|max:255',
+            'purpose' => 'required|string|max:255',
+            'start_date' => 'required|date|after_or_equal:today',
+            'end_date' => 'required|date|after_or_equal:start_date',
+            'destination' => 'required|string|max:255',
+            'expenses' => 'required|numeric',
+            'interim' => 'nullable|string|max:255',
+        ]);
+
+        // Récupérer l'utilisateur authentifié
+        $user = Auth::user();
+
+        // Vérifier si l'utilisateur est associé à un employé
+        $employee = Employee::where('user_id', $user->id)->first();
+
+        if (!$employee) {
+            return redirect()->back()->withErrors('Aucun employé associé à cet utilisateur.');
+        }
+
+        $mission = new InternationalMission();
+        $mission->employee_id = $employee->employee_id; // ID de l'employé associé
+        $mission->user_id = $user->id; // ID de l'utilisateur
+        $mission->mission_id = $request->mission_id;
+        $mission->superviseur = $request->superviseur;
+        $mission->purpose = $request->purpose;
+        $mission->start_date = $request->start_date;
+        $mission->end_date = $request->end_date;
+        $mission->destination = $request->destination;
+        $mission->expenses = $request->expenses;
+        $mission->interim = $request->interim;
+        $mission->status = 'pending'; // Statut par défaut
+        $mission->save();
+
+        // Notifications aux administrateurs
+        /*$admins = User::where('role', 'admin')->get();*/
+
+        /*foreach ($admins as $admin) {
+            $admin->notify(new NewInternationalMissionNotification($mission));
+        }
+*/
+        return redirect()->route('missions.international.user.index')->with('success', 'Demande de mission internationale créée avec succès.');
+    }
+
+
+
+
+
+
+    // Afficher le formulaire de modification d'une mission
+    public function edit($id)
+    {
+        $mission = InternationalMission::findOrFail($id);
+        return view('employee.missions.international.user.edit', compact('mission'));
+    }
+
+
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'mission_id' => 'required',
+            'superviseur' => 'required',
+            'purpose' => 'required',
+            'start_date' => 'required|date',
+            'end_date' => 'required|date|after:start_date',
+            'destination' => 'required',
+            'expenses' => 'required|numeric',
+        ]);
+
+        $mission = InternationalMission::findOrFail($id);
+        $mission->mission_id = $request->mission_id;
+        $mission->superviseur = $request->superviseur;
+        $mission->purpose = $request->purpose;
+        $mission->start_date = $request->start_date;
+        $mission->end_date = $request->end_date;
+        $mission->destination = $request->destination;
+        $mission->expenses = $request->expenses;
+        $mission->interim = $request->interim;
+        $mission->save();
+
+        return redirect()->route('missions.international.user.index')->with('success', 'Mission mise à jour avec succès.');
+    }
+
+    // Supprimer la demande de mission
+    public function destroy($id)
+    {
+        $mission = InternationalMission::findOrFail($id);
+        $mission->delete();
+        return redirect()->route('missions.international.user.index')->with('success', 'Mission supprimée avec succès.');
+    }
+
+
+
+
 
     // Vue pour les administrateurs
     public function adminIndex()
     {
         $missions = InternationalMission::all(); // Tous les missions
 
-        return view('missions.international.admin.index', compact('missions'));
+        return view('admin.internationale_misssion.index', compact('missions'));
     }
 
     // Créer un rapport pour une mission approuvée
@@ -62,51 +170,31 @@ class MissionInternationalleController extends Controller
 
     // Approuver une mission
     public function approveMission($id)
-    {
-        $mission = InternationalMission::findOrFail($id);
-        $mission->status = 'approved';
-        $mission->save();
+{
+    $mission = InternationalMission::findOrFail($id);
+    $mission->status = 'approved';
+    $mission->save();
 
-        return redirect()->route('missions.international.admin.index')->with('success', 'Mission approuvée avec succès.');
-    }
+    // Envoyer une notification à l'employé
+    $employee = $mission->employee; // Assurez-vous que la relation est correctement définie
+    $employee->user->notify(new MissionStatusInternationnaleChanged($mission, 'Approuvée'));
 
-    // Rejeter une mission
-    public function rejectMission($id)
-    {
-        $mission = InternationalMission::findOrFail($id);
-        $mission->status = 'rejected';
-        $mission->save();
+    return redirect()->route('missions.international.admin.index')->with('success', 'Mission approuvée avec succès.');
+}
 
-        return redirect()->route('missions.international.admin.index')->with('success', 'Mission rejetée avec succès.');
-    }
-    public function create()
-    {
-        return view('missions.international.create');
-    }
+public function rejectMission($id)
+{
+    $mission = InternationalMission::findOrFail($id);
+    $mission->status = 'rejected';
+    $mission->save();
 
-    // Enregistrer une nouvelle mission internationale
-    public function store(Request $request)
-    {
-        $validatedData = $request->validate([
-            'destination' => 'required|string|max:255',
-            'purpose' => 'required|string|max:500',
-            'start_date' => 'required|date|after:today',
-            'end_date' => 'required|date|after_or_equal:start_date',
-        ]);
+    // Envoyer une notification à l'employé
+    $employee = $mission->employee;
+    $employee->user->notify(new MissionStatusInternationnaleChanged($mission, 'Rejetée'));
 
-        // Utilisation d'un `employeeid` fictif
-        $employee_id = 'EMPL001';
+    return redirect()->route('missions.international.admin.index')->with('success', 'Mission rejetée avec succès.');
+}
 
-        // Créer une nouvelle mission
-        $mission = new InternationalMission();
-        $mission->destination = $validatedData['destination'];
-        $mission->purpose = $validatedData['purpose'];
-        $mission->start_date = $validatedData['start_date'];
-        $mission->end_date = $validatedData['end_date'];
-        $mission->status = 'pending'; // Statut initial par défaut
-        $mission->employee_id = $employee_id; // Données fictives pour l'employé
-        $mission->save(); // Le mission_id sera généré automatiquement ici
 
-        return redirect()->route('missions.international.user.index')->with('success', 'Mission ajoutée avec succès.');
-    }
+
 }

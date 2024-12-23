@@ -4,43 +4,47 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
-use Illuminate\Notifications\Messages\DatabaseMessage;
 
 class AbsenceNotification extends Notification
 {
     use Queueable;
 
     protected $absence;
+    protected $action;
 
-    /**
-     * Create a new notification instance.
-     */
-    public function __construct($absence)
+    public function __construct($absence, $action)
     {
         $this->absence = $absence;
+        $this->action = $action; // "added" pour un ajout, "updated" pour une modification
     }
 
-    /**
-     * Get the notification's delivery channels.
-     */
+    // On enlève le mail et on garde uniquement la base de données
     public function via($notifiable)
     {
-        return ['database']; // Storing in the database
+        return ['database'];  // On envoie uniquement dans la base de données
     }
+
+
+    public function toDatabase($notifiable)
 
     /*
       Get the array representation of the notification.
      
     public function toArray($notifiable)
+
     {
+        $actionMessage = $this->action === 'added'
+            ? "Une nouvelle absence a été ajoutée pour " . $this->absence->employee->user->name
+            : "L'absence de " . $this->absence->employee->user->name . " a été modifiée.";
+
         return [
-            'message' => "Une nouvelle absence a été ajoutée pour le {$this->absence->date}.",  // Ensure 'message' is included here
-            'date' => $this->absence->date,
-            'reason' => $this->absence->reason,
-            'duration' => $this->absence->duration,
+            'absence_id' => $this->absence->id_absence,
+            'employee_name' => $this->absence->employee->user->name,
+            'message' => $actionMessage,
         ];
     }
-       */
+
+       
         public function toArray($notifiable)
 {
     if ($this->absence === null) {
@@ -59,5 +63,6 @@ class AbsenceNotification extends Notification
         'duration' => $this->absence->duration,
     ];
 }
+
 
 }

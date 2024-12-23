@@ -4,6 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\LocalMission;
+use App\Models\Employee;
+use App\Notifications\MissionStatusChanged;
+use App\Notifications\MissionLocaleDemandeNotification;
+use Illuminate\Support\Facades\Notification;
+use App\Models\User;
+
 
 class LocalMissionController extends Controller
 {
@@ -12,76 +18,97 @@ class LocalMissionController extends Controller
      */
     public function createMissionLocale()
     {
-        return view('missions.local.create'); // Vue du formulaire
+        return view('employee.missions.local.create'); // Vue du formulaire
     }
-
-    /**
-     * Soumet une nouvelle mission locale.
-     */
-    public function store(Request $request)
+    public function index()
     {
-        // Valide les données de la requête
-        $validatedData = $request->validate([
-            'region' => 'required|string|max:255',
-            'accompanying_person' => 'required|string|max:255',
-            'superviseur' => 'required|string|max:255',
-            'purpose' => 'required|string|max:255',
-            'start_date' => 'required|date|before_or_equal:end_date',
-            'end_date' => 'required|date|after_or_equal:start_date',
-            'license_plate' => 'required|string|max:20',
-            'car_type' => 'required|string|max:50',
-            'fuel_type' => 'required|string|max:50',
-            'carte_carburant' => 'required|numeric',
-            'distance_traveled' => 'required|numeric',
-            'fuel_cost' => 'nullable|numeric',
-        ]);
-
-        // Générer un ID de mission unique
-        $validatedData['mission_id'] = 'ML' . strtoupper(uniqid());
-
-        // Vérifier si l'employé existe dans la table 'employees' avec l'ID 'EMPL001'
-        $employee = \App\Models\Employee::where('employee_id', 'EMPL001')->first();
-
-        if ($employee) {
-            // Ajouter l'ID de l'employé trouvé dans les données
-            $validatedData['employee_id'] = $employee->id;
-        } else {
-            // Si l'employé n'existe pas, on peut renvoyer un message d'erreur
-            return redirect()->back()->with('error', 'Employé non trouvé.');
-        }
-
-        // Calculer le coût du carburant
-        if (isset($validatedData['distance_traveled'])) {
-            $validatedData['fuel_cost'] = ($validatedData['distance_traveled'] / 100) * 2.525;
-        }
-
-        // Définit le statut initial comme "Pending"
-        $validatedData['status'] = 'Pending';
-
-        // Crée la mission locale
-        LocalMission::create($validatedData);
-
-        return redirect()->route('local_missions.index')->with('success', 'Mission locale créée avec succès.');
+        $missions = LocalMission::all(); // Liste complète des missions
+        return view('employee.missions.local.index', compact('missions'));
     }
+   /*
+     * Soumet une nouvelle mission locale.
+*/
+// app/Http/Controllers/LocalMissionController.php
+
+
+public function store(Request $request)
+{
+    $request->validate([
+        'superviseur' => 'required|string|max:255',
+        'region' => 'required|string|max:255',
+        'purpose' => 'required|string',
+        'start_date' => 'required|date|after_or_equal:today',
+        'end_date' => 'required|date|after_or_equal:start_date',
+        'accompanying_person' => 'nullable|string|max:255',
+        'license_plate' => 'nullable|string|max:20',
+        'car_type' => 'nullable|string|max:255',
+        'fuel_type' => 'nullable|string|max:50',
+        'carte_carburant' => 'nullable|string|max:255',
+        'distance_traveled' => 'nullable|numeric',
+        'fuel_cost' => 'nullable|numeric',
+        'toll_expenses' => 'nullable|numeric',
+        'hotel' => 'nullable|string|max:255',
+        'indemnity' => 'nullable|numeric',
+        'total_cost' => 'nullable|numeric',
+        'receipt_path' => 'nullable|file|mimes:jpg,png,pdf|max:10240',
+    ]);
+
+    $missionId = uniqid('mission_', true);
+
+    $employee = Employee::where('user_id', auth()->user()->id)->first();
+
+    if (!$employee) {
+        return redirect()->back()->withErrors('Employé non trouvé pour cet utilisateur.');
+    }
+
+    $employeeId = $employee->employee_id;
+
+    $localMission = new LocalMission();
+    $localMission->employee_id = $employeeId;
+    $localMission->mission_id = $missionId;
+    $localMission->superviseur = $request->superviseur;
+    $localMission->region = $request->region;
+    $localMission->purpose = $request->purpose;
+    $localMission->start_date = $request->start_date;
+    $localMission->end_date = $request->end_date;
+    $localMission->accompanying_person = $request->accompanying_person;
+    $localMission->license_plate = $request->license_plate;
+    $localMission->car_type = $request->car_type;
+    $localMission->fuel_type = $request->fuel_type;
+    $localMission->carte_carburant = $request->carte_carburant;
+    $localMission->distance_traveled = $request->distance_traveled;
+    $localMission->fuel_cost = $request->fuel_cost;
+    $localMission->toll_expenses = $request->toll_expenses;
+    $localMission->hotel = $request->hotel;
+    $localMission->indemnity = $request->indemnity;
+    $localMission->total_cost = $request->total_cost;
+
+    if ($request->hasFile('receipt_path')) {
+        $path = $request->file('receipt_path')->store('receipts', 'public');
+        $localMission->receipt_path = $path;
+    }
+
+    $localMission->save();
+
+    // Identifier les administrateurs
+// Récupérer les administrateurs (selon le rôle "admin")
+$admins = User::getUsersByRole('admin');
+
+// Envoyer une notification à chaque administrateur
+foreach ($admins as $admin) {
+    $admin->notify(new MissionLocaleDemandeNotification($localMission));
+}
+
+    return redirect()->route('local_missions.index')->with('success', 'Mission locale créée avec succès');
+}
+
 
 
 
     /**
      * Affiche la liste des missions locales.
      */
-    public function index()
-    {
-        // Récupère toutes les missions locales pour un employé spécifique (EMPL001)
-        $employee = \App\Models\Employee::where('employee_id', 'EMPL001')->first();
 
-        if ($employee) {
-            $missions = LocalMission::where('employee_id', $employee->id)->get();
-        } else {
-            $missions = collect();  // Retourne une collection vide si l'employé n'existe pas
-        }
-
-        return view('missions.local.index', compact('missions'));
-    }
 
 
     /**
@@ -138,6 +165,10 @@ public function approve($id)
     $mission->status = 'Approved';
     $mission->save();
 
+    // Envoyer une notification à l'employé
+    $employee = $mission->employee;  // Assurez-vous que la relation est correctement définie
+    $employee->user->notify(new MissionStatusChanged($mission, 'Approuvée')); // Notification envoyée à l'utilisateur associé à l'employé
+
     return redirect()->route('admin.local_missions.index')->with('success', 'Mission approuvée avec succès.');
 }
 
@@ -150,8 +181,14 @@ public function reject($id)
     $mission->status = 'Rejected';
     $mission->save();
 
+    // Envoyer une notification à l'employé
+    $employee = $mission->employee;
+    $employee->user->notify(new MissionStatusChanged($mission, 'Rejetée')); // Notification envoyée à l'utilisateur associé à l'employé
+
     return redirect()->route('admin.local_missions.index')->with('success', 'Mission rejetée avec succès.');
 }
+
+
 public function edit($id)
 {
     $mission = LocalMission::findOrFail($id); // Récupérer la mission avec l'ID

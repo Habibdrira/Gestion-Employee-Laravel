@@ -13,8 +13,6 @@
     @vite(['resources/sass/style.scss'])
 
     @yield('head')
-
-
 </head>
 
 <body>
@@ -26,12 +24,23 @@
         <div class="body flex-grow-1 px-3">
             <div class="container-lg">
 
-               @include('employee.layouts.components.response')
+                @include('employee.layouts.components.response')
+
+                <!-- Error Section -->
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
                 @yield('content')
             </div>
         </div>
-      @include('employee.layouts.components.footer')
+        @include('employee.layouts.components.footer')
     </div>
 
     @vite(['resources/js/app.js'])

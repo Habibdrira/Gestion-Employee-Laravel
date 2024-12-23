@@ -21,8 +21,12 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\HomeController;
+
+use App\Http\Controllers\NotificationController;
+
 use App\Http\Controllers\FichePaieController;
 use App\Http\Controllers\PrimeController;
+
 
 
 
@@ -36,7 +40,10 @@ Route::prefix('employee')->group(function () {
         Route::delete('/profile', [ProfileEmployeeController::class, 'destroy'])->name('employee.profile.destroy');
     });
 });
+// Sections des Notifications
 
+Route::get('/notifications', [NotificationController::class, 'showNotifications'])->name('notifications.show');
+Route::get('/notifications/mark-all-as-read', [NotificationController::class, 'markAllAsRead'])->name('notifications.markAllAsRead');
 
 
 
@@ -94,7 +101,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
     // Routes utilisateur - Missions locales
     Route::get('/missions/local/create', [LocalMissionController::class, 'createMissionLocale'])->name('local_missions.create');
-    Route::post('/missions/local/store', [LocalMissionController::class, 'store'])->name('local_missions.store');
+    Route::post('/missions/local', [LocalMissionController::class, 'store'])->name('local_missions.store');
     Route::get('/missions/local', [LocalMissionController::class, 'index'])->name('local_missions.index');
     Route::get('/missions/local/report/{id}', [LocalMissionController::class, 'createReport'])->name('local_missions.create_report');
     Route::post('/missions/local/report/{id}', [LocalMissionController::class, 'submitReport'])->name('local_missions.submit_report');
@@ -117,6 +124,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
         });
 
 
+
         Route::middleware('auth')->prefix('fichepaie')->name('fichepaie.')->group(function () {
             Route::get('/fichepaies/salary/{employeeId}', [FichePaieController::class, 'salary'])->name('fichepaie.salary');
             Route::get('/employee/fichepaies/download/{fichePaie}', [FichePaieController::class, 'download'])->name('download');
@@ -127,4 +135,5 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
   Route::prefix('employee')->group(function () {
     Route::get('/performance-chart', [PerformanceChartController::class, 'index'])->name('performance.chart');
 });
+
 

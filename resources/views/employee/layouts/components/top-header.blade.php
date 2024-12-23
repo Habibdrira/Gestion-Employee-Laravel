@@ -18,10 +18,19 @@
 
         <ul class="header-nav ms-auto">
             <li class="nav-item">
-                <a class="nav-link" href="#">
+                <a class="nav-link" href="{{ route('notifications.show') }}" id="notificationDropdown" aria-expanded="false">
                     <x-coreui-icon class="icon icon-lg" icon="cil-bell" />
+                    @if(auth()->user()->unreadNotifications->count() > 0)
+                        <span class="badge bg-danger rounded-pill">{{ auth()->user()->unreadNotifications->count() }}</span>
+                    @endif
                 </a>
             </li>
+
+
+
+
+
+
             <li class="nav-item"><a class="nav-link" href="#">
                     <x-coreui-icon class="icon icon-lg" icon="cil-list-rich" />
                 </a></li>

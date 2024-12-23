@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use App\Models\Employee;
+use App\Models\Absence;
 
 class EmployeeController extends Controller
 {
@@ -13,10 +14,12 @@ class EmployeeController extends Controller
     {
         $this->middleware('auth');
     }
-
     public function index()
     {
-        return view('employee.dashboard');
+        // Récupérer uniquement les notifications non lues de l'utilisateur connecté
+        $notifications = auth()->user()->unreadNotifications;
+
+        return view('employee.dashboard', compact('notifications'));
     }
 
     public function indexAdmin()
@@ -132,37 +135,7 @@ class EmployeeController extends Controller
 
 
 
-    public function notifications()
-{
-    $notifications = Auth::emplyee()->unreadNotifications;
-
-    return view('user.notifications.index', compact('notifications'));
-    //// 
 
 
-    
-}
-    public function notificationsfares()
-    {
-        $unreadNotifications = auth()->user()->unreadNotifications;
-        $readNotifications = auth()->user()->readNotifications;
-
-        // Marquer les notifications non lues comme lues
-        $unreadNotifications->markAsRead();
-
-        return view('user.dashboard', compact('unreadNotifications', 'readNotifications'));
-    }
-
-
-
-
-    public function markAllAsRead()
-    {
-        // Mark all unread notifications as read
-        auth()->user()->unreadNotifications->markAsRead();
-
-        // Redirect to the notifications page
-        return redirect()->route('employee.notifications');
-    }
 
 }

@@ -18,7 +18,7 @@ return new class extends Migration
                   ->references('employee_id') // Référence la clé primaire de la table employees
                   ->on('employees')
                   ->onDelete('cascade');
-            
+
             $table->string('mission_id')->unique();
             $table->string('superviseur');
             $table->string('region');
@@ -42,7 +42,7 @@ return new class extends Migration
             $table->string('receipt_path')->nullable();
             $table->timestamps();
         });
-        
+
 
 
             }

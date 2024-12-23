@@ -32,6 +32,20 @@ class Employee extends Model
      * Un employé peut avoir plusieurs absences.
      */
     public function absences()
+
+    {
+        // Indiquez explicitement la clé étrangère et la clé primaire
+        return $this->hasMany(Absence::class, 'employee_id', 'employee_id');
+    }
+
+
+    public function localMissions()
+    {
+        return $this->hasMany(LocalMission::class, 'employee_id', 'employee_id');
+    }
+
+
+
 {
     return $this->hasMany(Absence::class, 'employee_id', 'employee_id');
 }
@@ -57,6 +71,7 @@ class Employee extends Model
     /**
      * Relation avec Missions Internationales.
      */
+
     public function internationalMissions()
     {
         return $this->hasMany(InternationalMission::class, 'employee_id');
@@ -72,10 +87,13 @@ class Employee extends Model
         });
     }
 
+}
+
     public function demandesConge()
     {
         return $this->hasMany(DemandeConge::class, 'employee_id');
     }
 }
+
 
 
