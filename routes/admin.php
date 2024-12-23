@@ -110,3 +110,22 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
         });
     });
     
+
+
+  /// admi primes 
+  
+  use App\Http\Controllers\PrimeController;
+
+
+  
+  Route::prefix('admin')->name('admin.')->middleware('auth')->group(function() {
+      // Afficher les employés
+      Route::get('primes/index', [PrimeController::class, 'index'])->name('primes.index');
+      
+      // Formulaire pour créer une prime
+      Route::get('primes/create', [PrimeController::class, 'create'])->name('primes.create');
+      
+      // Enregistrer une prime
+      Route::post('primes', [PrimeController::class, 'store'])->name('primes.store');
+  });
+  

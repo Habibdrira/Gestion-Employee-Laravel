@@ -93,11 +93,26 @@
                 <x-coreui-icon class="nav-icon" icon="cil-pen" />
 
                 crer absences </a></li>
-              
-
     </ul>
 </li>
    
+
+
+
+<li class="nav-group"><a class="nav-link nav-group-toggle" href="#">
+
+    <x-coreui-icon class="nav-icon" icon="cil-user" />
+    Primes</a>
+<ul class="nav-group-items">
+
+    <li class="nav-item"><a class="nav-link" href="{{ route('admin.primes.index') }}">
+
+        <x-coreui-icon class="nav-icon" icon="cil-pen" />
+
+        Liste des Primes</a></li>
+          
+</ul>
+</li>
 
 
     </ul>
