@@ -9,11 +9,21 @@ class Prime extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['employee_id', 'amount', 'date_awarded'];
+    protected $table = 'primes';
+    protected $primaryKey = 'id_prime';
+    public $timestamps = true;
+
+    protected $fillable = [
+        'employee_id',
+        'amount',
+        'date_awarded',
+        'absence_factor',
+        'performance_factor'
+    ];
 
     // Relation avec l'employé
     public function employee()
     {
-        return $this->belongsTo(Employee::class, 'employee_id');
+        return $this->belongsTo(Employee::class, 'employee_id', 'employee_id');
     }
 }
