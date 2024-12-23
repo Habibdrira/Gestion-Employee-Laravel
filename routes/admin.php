@@ -40,7 +40,7 @@ Route::prefix('admin')->group(function () {
 
 
 
-// donia 
+// donia
 
 
 // Routes Admin protégées par l'authentification
@@ -94,24 +94,26 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
 
 
     Route::middleware('auth')->group(function () {
-    //// jihenne 
+    //// jihenne
 
-        // Administration des prêts (Admin)
-        Route::prefix('admin/loans')->name('admin.loans.')->group(function () {
-            Route::get('/', [LoanController::class, 'adminIndex'])->name('index');
-            Route::post('/{loan}/approve', [LoanController::class, 'approve'])->name('approve');
-            Route::post('/{loan}/reject', [LoanController::class, 'reject'])->name('reject');
-    
-            // Historique des prêts
-            Route::get('/history', [LoanController::class, 'loanHistory'])->name('history');
-    
-            // Téléchargement CSV des prêts
-            Route::get('/downloadCSV', [LoanController::class, 'downloadCSV'])->name('downloadCSV');
-        });
+     // Administration des prêts (Admin)
+Route::prefix('admin/loans')->name('admin.loans.')->group(function () {
+    // Route pour les prêts en attente
+    Route::get('/pending', [LoanController::class, 'pending'])->name('pending');
+
+    Route::get('/', [LoanController::class, 'adminIndex'])->name('index');
+    Route::post('/{loan}/approve', [LoanController::class, 'approve'])->name('approve');
+    Route::post('/{loan}/reject', [LoanController::class, 'reject'])->name('reject');
+
+    // Historique des prêts
+    Route::get('/history', [LoanController::class, 'loanHistory'])->name('history');
+
+    // Téléchargement CSV des prêts
+    Route::get('/downloadCSV', [LoanController::class, 'downloadCSV'])->name('downloadCSV');
+});
+
     });
-/*
 
-    //performances 
    
     Route::prefix('admin')->group(function () {
         Route::get('/performances', [PerformanceController::class, 'index'])->name('performances.index');
@@ -140,3 +142,4 @@ Route::middleware('auth')->prefix('admin')->name('admin.')->group(function () {
       // Enregistrer une prime
       Route::post('primes', [PrimeController::class, 'store'])->name('primes.store');
   });
+
