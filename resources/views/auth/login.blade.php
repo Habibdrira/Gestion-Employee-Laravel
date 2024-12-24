@@ -88,18 +88,8 @@
                         </div>
                         <div class="card col-md-5 text-white bg-primary py-5">
                             <div class="card-body text-center">
-                                <div>
-                                    <h2>Sign up</h2>
-                                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-                                        tempor incididunt ut labore et dolore magna aliqua.</p>
+                                
 
-
-                                    @if (Route::has('register'))
-                                        <a class="btn btn-lg btn-outline-light mt-3" href="{{ route('register') }}">
-                                            {{ __('Sign Up') }}
-                                        </a>
-                                    @endif
-                                </div>
                             </div>
                         </div>
                     </div>

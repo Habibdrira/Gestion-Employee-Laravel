@@ -10,9 +10,10 @@
     <p><strong>Total des primes : </strong> +{{ $totalPrimes ?? 0 }} €</p>
     <h3><strong>Salaire ajusté : </strong> {{ $adjustedSalary }} €</h3>
 
-    <a href="{{ route('fichepaie.downloadSalary', ['employeeId' => $employee->employee_id]) }}" class="btn btn-success">
+    <a href="{{ route('employee.fichepaie.downloadSalary', ['employeeId' => $employee->employee_id]) }}" class="btn btn-success">
         Télécharger le rapport de salaire
     </a>
-    <a href="{{ route('fichepaie.index') }}" class="btn btn-primary">Retour</a>
+    
+    <a href="{{ route('employee.fichepaie.index') }}" class="btn btn-primary">Retour</a>
 </div>
 @endsection

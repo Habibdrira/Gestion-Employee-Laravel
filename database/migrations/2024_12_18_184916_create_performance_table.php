@@ -13,9 +13,9 @@ return new class extends Migration
 {
     Schema::create('performances', function (Blueprint $table) {
         $table->id('id_performance');
+        $table->unsignedBigInteger('employee_id'); 
         $table->double('rating');
         $table->date('date');
-        $table->unsignedBigInteger('employee_id'); // FK vers la table 'employee'
         $table->timestamps();
 
         $table->foreign('employee_id')->references('employee_id')->on('employees')->onDelete('cascade');

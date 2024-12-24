@@ -45,32 +45,10 @@ class Employee extends Model
     }
 
 
-
-{
-    return $this->hasMany(Absence::class, 'employee_id', 'employee_id');
-}
-
-    /**
-     * Relation avec Primes.
-     * Un employé peut recevoir plusieurs primes.
-     */
     public function primes()
 {
     return $this->hasMany(Prime::class, 'employee_id', 'employee_id');
 }
-
-
-    /**
-     * Relation avec Missions Locales.
-     */
-    public function localMissions()
-    {
-        return $this->hasMany(LocalMission::class, 'employee_id');
-    }
-
-    /**
-     * Relation avec Missions Internationales.
-     */
 
     public function internationalMissions()
     {
@@ -87,13 +65,19 @@ class Employee extends Model
         });
     }
 
-}
-
     public function demandesConge()
     {
         return $this->hasMany(DemandeConge::class, 'employee_id');
     }
+    
+    public function performances()
+    {
+        return $this->hasMany(Performance::class, 'employee_id', 'employee_id');
+    }
+    
+
 }
+
 
 
 

@@ -13,8 +13,6 @@
                                 {{ __("Please make a strong password and don't share your password with anyone.") }}
                             </p>
 
-
-
                             <!-- Session Status -->
                             <x-auth-session-status class="mb-4 alert-info" :status="session('status')" />
 
