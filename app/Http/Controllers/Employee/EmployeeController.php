@@ -156,4 +156,64 @@ return view('employee.dashboard', compact('notifications', 'primes', 'performanc
     }
 
 
+    
+    
+
+
+    public function prime()
+    {
+        // Vérifier si l'utilisateur est authentifié
+        if (auth()->check()) {
+            // Récupérer l'employé lié à l'utilisateur connecté
+            $employee = auth()->user()->employee;
+    
+            // Vérifier si l'employé existe
+            if ($employee) {
+                // Récupérer uniquement le montant et la date des primes
+                $primes = Prime::where('employee_id', $employee->employee_id)
+                    ->orderBy('date_awarded', 'desc')
+                    ->get(['amount', 'date_awarded']); // Récupération des colonnes spécifiques
+    
+                // Retourner la vue avec les données des primes
+                return view('employee.primes.index', compact('primes'));
+            }
+    
+            // Rediriger si aucun employé n'est trouvé
+            return redirect()->route('employee.dashboard')->with('error', 'Aucun employé trouvé.');
+        }
+    
+        // Rediriger si l'utilisateur n'est pas authentifié
+        return redirect()->route('login')->with('error', 'Veuillez vous connecter.');
+    }
+    
+
+    public function performance()
+    {
+        // Vérifier si l'utilisateur est authentifié
+        if (auth()->check()) {
+            // Récupérer l'employé lié à l'utilisateur connecté
+            $employee = auth()->user()->employee;
+    
+            // Vérifier si l'employé existe
+            if ($employee) {
+                // Récupérer uniquement la note et la date des performances
+                $performances = Performance::where('employee_id', $employee->employee_id)
+                    ->orderBy('date', 'desc')
+                    ->get(['rating', 'date']); // Récupération des colonnes spécifiques
+    
+                // Retourner la vue avec les données des performances
+                return view('employee.performances.index', compact('performances'));
+            }
+    
+            // Rediriger si aucun employé n'est trouvé
+            return redirect()->route('employee.dashboard')->with('error', 'Aucun employé trouvé.');
+        }
+    
+        // Rediriger si l'utilisateur n'est pas authentifié
+        return redirect()->route('login')->with('error', 'Veuillez vous connecter.');
+    }
+    
+
+
+
 }

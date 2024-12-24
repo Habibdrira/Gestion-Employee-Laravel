@@ -90,7 +90,6 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
 
 
-
         // Routes des prêts pour les utilisateurs
         Route::prefix('loans')->name('loans.')->group(function () {
             Route::get('/', [LoanController::class, 'index'])->name('index'); // Liste des prêts
@@ -100,11 +99,6 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
 
 
-        Route::middleware('auth')->prefix('fichepaie')->name('employee.')->group(function () {
-            Route::get('/fichepaies/salary/{employeeId}', [FichePaieController::class, 'salary'])->name('fichepaie.salary');
-            Route::get('/employee/fichepaies/download/{fichePaie}', [FichePaieController::class, 'download'])->name('download');
-        });
-
    
   //performaces
   Route::prefix('employee')->group(function () {
@@ -112,3 +106,18 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 });
 
 
+
+Route::middleware('auth')->prefix('employee')->name('employee.')->group(function () {
+    Route::get('/primes/index', [EmployeeController::class, 'Prime'])->name('primes.index');
+    Route::get('/performance/index', [EmployeeController::class, 'performance'])->name('performance.index');
+});
+
+
+
+Route::middleware('auth')->prefix('fichepaie')->name('employee.')->group(function () {
+    Route::get('/fichepaies', [FichePaieController::class, 'index'])->name('fichepaie.index');
+
+    Route::get('/fichepaies/salary/{employeeId}', [FichePaieController::class, 'salary'])->name('fichepaie.salary');
+    Route::get('/fichepaies/download/{employeeId}', [FichePaieController::class, 'download'])
+    ->name('fichepaie.downloadSalary');
+});

@@ -1,7 +1,7 @@
 <div class="sidebar sidebar-dark sidebar-fixed" id="sidebar" style="background-color: #212631;">
     <div class="sidebar-brand d-none d-md-flex">
         <svg class="sidebar-brand-full" width="118" height="46" alt="CoreUI Logo">
-            <use xlink:href="#"></use>
+            <use xlink:href="{{ asset('assets/brand/coreui.svg#signet') }}"></use> 
         </svg>
         <svg class="sidebar-brand-narrow" width="46" height="46" alt="CoreUI Logo">
             <use xlink:href="{{ asset('assets/brand/coreui.svg#signet') }}"></use>
