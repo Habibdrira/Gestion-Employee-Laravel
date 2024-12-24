@@ -8,6 +8,9 @@ use App\Models\User;
 use App\Models\Employee;
 use App\Models\Absence;
 
+use App\Models\Performance;
+
+use App\Models\Prime;
 class EmployeeController extends Controller
 {
     public function __construct()
@@ -16,10 +19,31 @@ class EmployeeController extends Controller
     }
     public function index()
     {
-        // Récupérer uniquement les notifications non lues de l'utilisateur connecté
-        $notifications = auth()->user()->unreadNotifications;
+        // Vérifier si l'utilisateur est authentifié
+    if (auth()->check()) {
+        // Récupérer l'employé lié à l'utilisateur connecté
+        $employee = auth()->user()->employee;
 
-        return view('employee.dashboard', compact('notifications'));
+        // Vérifier si l'employé existe
+        if ($employee) {
+            // Récupérer les primes, performances, et absences pour cet employé
+            $primes = Prime::where('employee_id', $employee->employee_id)->sum('amount');
+            $performances = Performance::where('employee_id', $employee->employee_id)->count();
+            $absences = Absence::where('employee_id', $employee->employee_id)->count();
+
+            $notifications = auth()->user()->unreadNotifications;
+
+
+return view('employee.dashboard', compact('notifications', 'primes', 'performances', 'absences'));
+
+                } else {
+            // Si aucun employé n'est trouvé pour cet utilisateur
+            return redirect()->route('home')->with('error', 'Employé non trouvé.');
+        }
+    } else {
+        // Si l'utilisateur n'est pas authentifié
+        return redirect()->route('login')->with('error', 'Veuillez vous connecter.');
+    }
     }
 
     public function indexAdmin()
@@ -130,12 +154,6 @@ class EmployeeController extends Controller
             return redirect()->back()->with('error', 'Une erreur est survenue lors de la suppression.');
         }
     }
-
-
-
-
-
-
 
 
 }

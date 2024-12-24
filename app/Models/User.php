@@ -99,6 +99,7 @@ public function fichePaies()
 {
     return $this->hasMany(FichePaie::class);
 }
+
 public function employee()
 {
     return $this->hasOne(Employee::class, 'user_id', 'id');
