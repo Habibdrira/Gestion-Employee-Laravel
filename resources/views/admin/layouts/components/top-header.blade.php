@@ -41,11 +41,7 @@
                 <div class="dropdown-menu dropdown-menu-end pt-0">
                     <div class="dropdown-header bg-light py-2">
                         <div class="fw-semibold">Account</div>
-                    </div><a class="dropdown-item" href="#">
-
-                        <x-coreui-icon class="icon me-2" icon="cil-bell" />
-                        Updates
-                        <span class="badge badge-sm bg-info ms-2">42</span></a>
+                    </div>
 
                     <a class="dropdown-item" href="#">
 
@@ -53,11 +49,6 @@
                         Messages<span class="badge badge-sm bg-success ms-2">42</span>
                     </a>
 
-                    <a class="dropdown-item" href="#">
-
-                        <x-coreui-icon class="icon me-2" icon="cil-task" />
-                        Tasks<span class="badge badge-sm bg-success ms-2">42</span>
-                    </a>
 
                     <a class="dropdown-item" href="#">
 
@@ -65,46 +56,13 @@
                         Comments<span class="badge badge-sm bg-success ms-2">42</span>
                     </a>
 
-
-                    <div class="dropdown-header bg-light py-2">
-                        <div class="fw-semibold">Settings</div>
-                    </div>
-
-
                     <a class="dropdown-item" href="{{route('admin.profile.edit')}}">
 
                         <x-coreui-icon class="icon me-2" icon="cil-user" />
                         Profile
                     </a>
 
-                    <a class="dropdown-item" href="#">
-
-                        <x-coreui-icon class="icon me-2" icon="cil-settings" />
-                        Settings
-                    </a>
-
-                    <a class="dropdown-item" href="#">
-
-                        <x-coreui-icon class="icon me-2" icon="cil-credit-card" />
-                        Payments
-                    </a>
-
-                    <a class="dropdown-item" href="#">
-
-                        <x-coreui-icon class="icon me-2" icon="cil-file" />
-                        Projects
-                    </a>
-
-                    <div class="dropdown-divider"></div>
-
-                    <a class="dropdown-item" href="#">
-                        <x-coreui-icon class="icon me-2" icon="cil-lock-locked" />
-                        Lock Account
-                    </a>
-
-
-
-
+    
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
 

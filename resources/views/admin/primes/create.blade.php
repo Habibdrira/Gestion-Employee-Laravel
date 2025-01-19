@@ -16,7 +16,7 @@
                             <select name="employee_id" id="employee_id" class="form-control" required>
                                 <option value="">Choisir un employé</option>
                                 @foreach($employees as $employee)
-                                    <option value="{{ $employee->id }}">{{ $employee->user->name ?? 'Nom non défini' }}</option>
+                                    <option value="{{ $employee->employee_id }}">{{ $employee->user->name ?? 'Nom non défini' }}</option>
                                 @endforeach
                             </select>
                         </div>

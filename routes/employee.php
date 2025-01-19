@@ -1,17 +1,11 @@
 <?php
-
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Employee\ProfileEmployeeController;
 use App\Http\Controllers\Employee\EmployeeController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Employee\DemandeCongeController;
-
-
 use App\Http\Controllers\LoanController;
-
 use App\Http\Controllers\Employee\PerformanceChartController;
-
-
 use App\Http\Controllers\StatusController;
 use App\Http\Controllers\AbsenceController;
 use Illuminate\Support\Facades\Auth;
@@ -21,9 +15,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\HomeController;
-
 use App\Http\Controllers\NotificationController;
-
 use App\Http\Controllers\FichePaieController;
 use App\Http\Controllers\PrimeController;
 
@@ -47,17 +39,6 @@ Route::get('/notifications/mark-all-as-read', [NotificationController::class, 'm
 
 
 
-// donia
-// Dashboard Employee
-/*
-// Gestion des congés pour les utilisateurs
-Route::middleware('auth')->prefix('employee')->name('employee.')->group(function () {
-    Route::get('/demande-conge/create', [DemandeCongeController::class, 'create'])->name('demande_conge.create');
-    Route::get('/demande-conge/index', [DemandeCongeController::class, 'index'])->name('demande_conge.index');
-    Route::post('/demande-conge/store', [DemandeCongeController::class, 'store'])->name('demande_conge.store');
-});
-*/
-
 // Dashboard Employee
 Route::middleware('auth')->prefix('employee')->name('employee.')->group(function () {
     // Afficher le formulaire de demande de congé
@@ -74,9 +55,7 @@ Route::middleware('auth')->prefix('employee')->name('employee.')->group(function
 });
 
 
- //performances 
-   
- 
+
 
 // ajout de la route pour les employés
 Route::prefix('admin')->middleware(['auth'])->group(function () {
@@ -111,11 +90,6 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
 
 
-
-
-    /////// jihenne
-
-
         // Routes des prêts pour les utilisateurs
         Route::prefix('loans')->name('loans.')->group(function () {
             Route::get('/', [LoanController::class, 'index'])->name('index'); // Liste des prêts
@@ -125,11 +99,6 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 
 
 
-        Route::middleware('auth')->prefix('fichepaie')->name('fichepaie.')->group(function () {
-            Route::get('/fichepaies/salary/{employeeId}', [FichePaieController::class, 'salary'])->name('fichepaie.salary');
-            Route::get('/employee/fichepaies/download/{fichePaie}', [FichePaieController::class, 'download'])->name('download');
-        });
-
    
   //performaces
   Route::prefix('employee')->group(function () {
@@ -137,3 +106,18 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
 });
 
 
+
+Route::middleware('auth')->prefix('employee')->name('employee.')->group(function () {
+    Route::get('/primes/index', [EmployeeController::class, 'Prime'])->name('primes.index');
+    Route::get('/performance/index', [EmployeeController::class, 'performance'])->name('performance.index');
+});
+
+
+
+Route::middleware('auth')->prefix('fichepaie')->name('employee.')->group(function () {
+    Route::get('/fichepaies', [FichePaieController::class, 'index'])->name('fichepaie.index');
+
+    Route::get('/fichepaies/salary/{employeeId}', [FichePaieController::class, 'salary'])->name('fichepaie.salary');
+    Route::get('/fichepaies/download/{employeeId}', [FichePaieController::class, 'download'])
+    ->name('fichepaie.downloadSalary');
+});

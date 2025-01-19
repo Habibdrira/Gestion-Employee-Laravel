@@ -12,7 +12,7 @@ class CreatePrimesTable extends Migration
             $table->bigIncrements('id_prime'); // Clé primaire
             $table->unsignedBigInteger('employee_id'); // Clé étrangère vers employees
             $table->decimal('amount', 10, 2); // Montant de la prime
-            $table->date('date_awarded'); // Date d’attribution de la prime
+            $table->timestamp('date_awarded')->nullable();  // Ajout de la colonne date_awarded
             $table->decimal('absence_factor', 5, 2)->default(1.00); // Facteur lié à l'absence
             $table->decimal('performance_factor', 5, 2)->default(1.00); // Facteur lié à la performance
             $table->timestamps(); // Champs created_at et updated_at
@@ -24,7 +24,7 @@ class CreatePrimesTable extends Migration
                   ->onDelete('cascade');
 
             // Ajout d'index pour les recherches fréquentes
-            $table->index(['date_awarded']);
+            
         });
     }
 

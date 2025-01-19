@@ -24,27 +24,6 @@ class AbsenceNotification extends Notification
         return ['database'];  // On envoie uniquement dans la base de données
     }
 
-
-    public function toDatabase($notifiable)
-
-    /*
-      Get the array representation of the notification.
-     
-    public function toArray($notifiable)
-
-    {
-        $actionMessage = $this->action === 'added'
-            ? "Une nouvelle absence a été ajoutée pour " . $this->absence->employee->user->name
-            : "L'absence de " . $this->absence->employee->user->name . " a été modifiée.";
-
-        return [
-            'absence_id' => $this->absence->id_absence,
-            'employee_name' => $this->absence->employee->user->name,
-            'message' => $actionMessage,
-        ];
-    }
-
-       
         public function toArray($notifiable)
 {
     if ($this->absence === null) {
@@ -64,5 +43,23 @@ class AbsenceNotification extends Notification
     ];
 }
 
+    /*
+      Get the array representation of the notification.
+     
+    public function toArray($notifiable)
+
+    {
+        $actionMessage = $this->action === 'added'
+            ? "Une nouvelle absence a été ajoutée pour " . $this->absence->employee->user->name
+            : "L'absence de " . $this->absence->employee->user->name . " a été modifiée.";
+
+        return [
+            'absence_id' => $this->absence->id_absence,
+            'employee_name' => $this->absence->employee->user->name,
+            'message' => $actionMessage,
+        ];
+    }
+
+       */
 
 }
