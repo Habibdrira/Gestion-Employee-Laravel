@@ -53,6 +53,8 @@ class StatusController extends Controller
     }
 
 
+
+    
     public function updateStatus(Request $request)
     {
         // Valider la requête
@@ -61,67 +63,53 @@ class StatusController extends Controller
         ]);
 
         // Récupérer l'utilisateur connecté
-        $user = auth()->user();
+           // Récupérer l'utilisateur connecté
+           $user = auth()->user();
 
         // Trouver ou créer le statut de l'utilisateur
         $status_user = StatusUser::firstOrCreate(
-            ['user_id' => $user->id], 
-            ['status' => 'offline'] 
+            ['user_id' => $user->id],
+            ['status' => 'offline', 'start_time' => null, 'end_time' => null]
         );
 
         // Si l'utilisateur passe de "active" à un autre statut, calculer les minutes travaillées
         if ($status_user->status == 'active' && $request->status != 'active') {
-            // Calculer et enregistrer les minutes travaillées
             $this->calculateAndStoreMinutes($user, $status_user->start_time, now());
-
-            // Réinitialiser l'heure de début
-            $status_user->start_time = null;
+            $status_user->start_time = null; // Réinitialiser l'heure de début
         }
 
         // Si le statut passe à "active", enregistrer l'heure de début
-        if ($status_user->status != 'active' && $request->status == 'active') {
-            $status_user->start_time = now(); // Enregistrer l'heure de début
+        if ($request->status == 'active') {
+            $status_user->start_time = now();
+        } else {
+            $status_user->end_time = now(); // Enregistrer l'heure de fin pour "offline" ou "busy"
         }
 
         // Mettre à jour le statut de l'utilisateur
         $status_user->status = $request->status;
-
-        // Si le statut est "offline" ou "busy", enregistrer l'heure de fin
-        if ($request->status == 'offline' || $request->status == 'busy') {
-            $status_user->end_time = now();
-        }
-
-        // Sauvegarder le statut de l'utilisateur
         $status_user->save();
 
-        // Sauvegarder le statut dans la table users
-        $user->status_user = $request->status;
-        $user->save();
-
-        return back()->with('success', 'Statut mis à jour avec succès!');
+        return back()->with('success', 'Statut mis à jour avec succès !');
     }
 
     /**
-     * Calculer les minutes travaillées et les enregistrer.
+     * Calculer les minutes travaillées et les enregistrer dans la table `work_minutes`.
      */
- 
+    private function calculateAndStoreMinutes($user, $start_time, $end_time)
+    {
+        if ($start_time && $end_time) {
+            $start_time = Carbon::parse($start_time);
+            $end_time = Carbon::parse($end_time);
 
-private function calculateAndStoreMinutes($user, $start_time, $end_time)
-{
-    // Vérifier si start_time et end_time sont valides
-    if ($start_time && $end_time) {
-        // Convertir les valeurs en objets Carbon si nécessaire
-        $start_time = Carbon::parse($start_time);
-        $end_time = Carbon::parse($end_time);
+            // Calculer la différence en minutes
+            $minutes_worked = $start_time->diffInMinutes($end_time);
 
-        // Calculer la différence en minutes
-        $minutes_worked = $start_time->diffInMinutes($end_time);
-
-        // Enregistrer les minutes travaillées dans la table `work_minutes`
-        WorkMinute::create([
-            'user_id' => $user->id,
-            'minutes_worked' => $minutes_worked,
-        ]);
+            // Enregistrer les minutes travaillées dans `work_minutes`
+            WorkMinute::create([
+                'user_id' => $user->id,
+                'minutes_worked' => $minutes_worked,
+                'day' => $start_time->day,
+            ]);
+        }
     }
-}
 }

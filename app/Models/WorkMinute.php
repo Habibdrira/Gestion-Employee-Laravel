@@ -13,6 +13,7 @@ class WorkMinute extends Model
     protected $fillable = [
         'user_id',
         'minutes_worked',
+        'day',
     ];
 
     // Relation avec l'utilisateur
