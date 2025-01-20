@@ -13,7 +13,7 @@ use Illuminate\View\View;
 class AuthenticatedSessionController extends Controller
 {
     /**
-     * Display the login view.
+     * Afficher la vue de connexion.
      */
     public function create(): View
     {
@@ -21,36 +21,45 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Handle an incoming authentication request.
+     * Gérer la requête d'authentification entrante.
      */
     public function store(LoginRequest $request): RedirectResponse
     {
+        // Authentifier l'utilisateur
         $request->authenticate();
+        
+        // Régénérer la session pour éviter les attaques par fixation de session
         $request->session()->regenerate();
 
-        // Redirection personnalisée en fonction du rôle de l'utilisateur
-        $user = Auth::user(); // Obtenir l'utilisateur authentifié
+        // Enregistrer le nom de l'utilisateur dans la session pour l'affichage
+        session(['name' => Auth::user()->name]);
 
+        // Redirection personnalisée en fonction du rôle de l'utilisateur
+        $user = Auth::user(); // Récupérer l'utilisateur authentifié
+
+        // Vérifier le rôle de l'utilisateur et rediriger en conséquence
         if ($user->role_id == 1) {
-            // Rediriger les administrateurs
-            return redirect()->route('admin.dashboard');
+            // Rediriger l'administrateur vers le tableau de bord admin
+            return redirect()->route('admin.dashboard')->with('success', 'Bienvenue Administrateur, ' . $user->name);
         }
 
-        // Rediriger les employés
-        return redirect()->route('employee.dashboard');
+        // Rediriger les employés vers leur tableau de bord
+        return redirect()->route('employee.dashboard')->with('success', 'Bienvenue Employé, ' . $user->name);
     }
 
     /**
-     * Destroy an authenticated session.
+     * Détruire une session authentifiée.
      */
     public function destroy(Request $request): RedirectResponse
     {
+        // Déconnecter l'utilisateur
         Auth::guard('web')->logout();
 
+        // Invalider la session et régénérer le token CSRF
         $request->session()->invalidate();
-
         $request->session()->regenerateToken();
 
+        // Rediriger vers la page d'accueil
         return redirect('/');
     }
 }

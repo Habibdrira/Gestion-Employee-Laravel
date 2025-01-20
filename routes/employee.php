@@ -16,10 +16,10 @@ use App\Http\Controllers\DashboardController;
 use Illuminate\Support\Facades\Gate;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\NotificationController;
-use App\Http\Controllers\FichePaieController;
+
 use App\Http\Controllers\PrimeController;
 
-
+use App\Http\Controllers\Employee\FichePaieController;
 
 
 

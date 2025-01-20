@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\Hash;
 
+
 class User extends Authenticatable
 {
     use HasFactory, Notifiable;
@@ -103,6 +104,19 @@ public function fichePaies()
 public function employee()
 {
     return $this->hasOne(Employee::class, 'user_id', 'id');
+}
+
+public function statusUser()
+{
+    return $this->hasOne(StatusUser::class);
+}
+
+// Dans le modèle User
+// Dans le modèle User (app/Models/User.php)
+public function getStatus()
+{
+    // Vérifier si la relation `statusUser` existe et retourner le statut de l'utilisateur
+    return $this->statusUser ? $this->statusUser->status : 'offline';
 }
 
 
