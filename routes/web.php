@@ -9,6 +9,9 @@ Route::get('/', function () {
 });
 
 
+use App\Http\Controllers\ChartController;
+
+Route::get('/chart', [ChartController::class, 'index'])->name('chart.index');
 
 
 

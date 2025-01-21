@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
@@ -8,60 +9,46 @@ use App\Models\Employee;
 use App\Models\Absence;
 use App\Models\Prime;
 use Carbon\Carbon;
-use ConsoleTVs\Charts\Facades\Charts;
 
 class AdminController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        // Calcul des données principales pour les cartes
-        $totalEmployees = Employee::count();
-        $totalAbsences = Absence::count();
-        $totalPrimes = Prime::sum('amount');
-        $averagePerformance = Performance::avg('rating');
+        // Appel des méthodes pour obtenir les données nécessaires
+        $cards = $this->getCardData();
+        $employees = $this->getEmployees();
+        list($absenceData, $daysOfWeek) = $this->getAbsencesByWeek();
 
-        // Préparer les données pour les cartes
-        $cards = [
-            [
-                'color' => 'primary',
-                'value' => $totalEmployees,
-                'percentage' => '',
-                'arrow' => '',
-                'label' => 'Total Employees',
-                'chart_id' => 'card-chart1',
-            ],
-            [
-                'color' => 'info',
-                'value' => $totalAbsences,
-                'percentage' => '',
-                'arrow' => '',
-                'label' => 'Total Absences',
-                'chart_id' => 'card-chart2',
-            ],
-            [
-                'color' => 'success',
-                'value' => $totalPrimes .'DT',
-                'percentage' => '',
-                'arrow' => '',
-                'label' => 'Total Primes',
-                'chart_id' => 'card-chart3',
-            ],
-            [
-                'color' => 'danger',
-                'value' => round($averagePerformance, 2),
-                'percentage' => '',
-                'arrow' => '',
-                'label' => 'Average Performance',
-                'chart_id' => 'card-chart4',
-            ],
-        ];
+        $performanceData = $this->getPerformanceByWeek(); // Ajouter ici
 
-        // Charger les employés avec les relations
-        $employees = Employee::with(['primes', 'performances', 'absences'])->get();
+        // Transmettre les données à la vue
+        return view('admin.dashboard', compact('cards', 'employees', 'absenceData', 'daysOfWeek', 'performanceData'));
+    }
 
+    /**
+     * Récupérer les données pour les cartes principales (total des employés, absences, primes, performance)
+     *
+     * @return array
+     */
+    
+
+    /**
+     * Récupérer les employés avec leurs relations (primes, performances, absences)
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    private function getEmployees()
+    {
+        return Employee::with(['primes', 'performances', 'absences'])->get();
+    }
+
+    /**
+     * Récupérer les absences des 7 derniers jours et les agréger par jour de la semaine
+     *
+     * @return array
+     */
+    private function getAbsencesByWeek()
+    {
         // Récupérer les absences des 7 derniers jours
         $startOfWeek = Carbon::now()->subWeek()->startOfWeek();
         $endOfWeek = Carbon::now()->subWeek()->endOfWeek();
@@ -72,30 +59,88 @@ class AdminController extends Controller
             return Carbon::parse($date->date)->format('l'); // Récupère le jour de la semaine
         });
 
-        // Calcul des performances moyennes par jour
-        $performanceCountsByDay = Performance::whereBetween('created_at', [$startOfWeek, $endOfWeek])
-            ->get()
-            ->groupBy(function($performance) {
-                return Carbon::parse($performance->created_at)->format('l');
-            });
+        // Calculer le nombre d'absences par jour
+        $daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        $absenceData = [];
+        
+        foreach ($daysOfWeek as $day) {
+            $absenceData[] = $absenceCountsByDay->has($day) ? $absenceCountsByDay->get($day)->count() : 0;
+        }
 
-            $daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-            $absenceData = [];
-            $performanceData = [];
-            
-            // Exemple de simulation de données
-            foreach ($daysOfWeek as $day) {
-                $absenceData[] = rand(0, 10); // Absences aléatoires
-                $performanceData[] = rand(50, 100); // Performances aléatoires
-            }
-            
-            
+        return [$absenceData, $daysOfWeek];
+    }
 
 
+    private function getPerformanceByWeek()
+    {
+        // Récupérer les performances des 7 derniers jours
+        $startOfWeek = Carbon::now()->subWeek()->startOfWeek();
+        $endOfWeek = Carbon::now()->subWeek()->endOfWeek();
+        $performances = Performance::whereBetween('date', [$startOfWeek, $endOfWeek])->get();
 
-            // Transmettre les données à la vue
-            return view('admin.dashboard', compact('cards', 'employees', 'absenceData', 'performanceData', 'daysOfWeek'));
+        // Agréger les performances par jour de la semaine
+        $performanceCountsByDay = $performances->groupBy(function($performance) {
+            return Carbon::parse($performance->date)->format('l'); // Récupère le jour de la semaine
+        });
+
+        // Calculer la moyenne des performances par jour
+        $daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        $performanceData = [];
+        
+        foreach ($daysOfWeek as $day) {
+            $performancesOnDay = $performanceCountsByDay->has($day) ? $performanceCountsByDay->get($day) : collect();
+            $performanceData[] = $performancesOnDay->avg('rating'); // Calcul de la moyenne des performances
+        }
+
+        return $performanceData;
+    }
+
+
+
+
+
+
+
+
+
+
+    private function getCardData()
+    {
+        // Calcul des données principales
+        $totalEmployees = Employee::count();
+        $totalAbsences = Absence::count();
+        $totalPrimes = Prime::sum('amount');
+        $averagePerformance = Performance::avg('rating');
+
+        // Retourner les données sous forme de tableau
+        return [
+            [
+                'color' => 'primary',
+                'value' => $totalEmployees,
+                'label' => 'Total Employees',
+            ],
+            [
+                'color' => 'info',
+                'value' => $totalAbsences,
+                'label' => 'Total Absences',
+            ],
+            [
+                'color' => 'success',
+                'value' => $totalPrimes . 'DT',
+                'label' => 'Total Primes',
+            ],
+            [
+                'color' => 'danger',
+                'value' => round($averagePerformance, 2),
+                'label' => 'Average Performance',
+            ],
+        ];
+    }
 }
-}
+
+
+
+
+
 
 

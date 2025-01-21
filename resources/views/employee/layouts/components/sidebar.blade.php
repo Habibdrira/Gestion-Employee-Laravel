@@ -2,7 +2,7 @@
     <div class="sidebar-brand d-none d-md-flex">
         <!-- Ajout de l'image PNG -->
         <img 
-            src="{{ asset('assets/img/logobd.jpg') }}" 
+            src="{{ asset('assets/img/1.png') }}" 
             alt="Logo BD" 
             class="sidebar-brand-full" 
             width="200" 

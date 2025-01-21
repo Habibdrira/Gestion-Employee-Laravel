@@ -31,26 +31,16 @@
     @endforeach
 </div>
 
-<!-- Courbes des absences et des performances par semaine -->
-<div class="row mt-4">
+<div class="row">
     <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">Absences par semaine</div>
-            <div class="card-body">
-                <div id="absencesChart"></div>
-            </div>
-        </div>
+        <!-- Inclure le graphique des absences -->
+        @include('admin.charts.absenceChart')
     </div>
     <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">Performances moyennes par semaine</div>
-            <div class="card-body">
-                <div id="performancesChart"></div>
-            </div>
-        </div>
+        <!-- Inclure le graphique des performances -->
+        @include('admin.charts.performanceChart')
     </div>
 </div>
-
 
 
 <!-- Tableau des employés -->
@@ -63,6 +53,8 @@
             <th>Primes</th>
             <th>Performances</th>
             <th>Absences</th>
+            <th>Salaire</th> <!-- Nouvelle colonne pour le salaire -->
+            <th>Status</th> <!-- Nouvelle colonne pour le statut -->
         </tr>
     </thead>
     <tbody>
@@ -84,87 +76,20 @@
                 <td>
                     {{ $employee->absences->count() }} absences
                 </td>
+                <td>
+                    {{ number_format($employee->salary, 2) }} TND <!-- Affichage du salaire -->
+                </td>
+                <!-- Affichage du statut avec coloration -->
+                <td>
+                    @if($employee->status == 'active')
+                        <span class="badge bg-success">Active</span>
+                    @else
+                        <span class="badge bg-danger">Inactive</span>
+                    @endif
+                </td>
             </tr>
         @endforeach
     </tbody>
 </table>
-@endsection
 
-
-
-@section('scripts')
-<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-<script>
-    console.log('Absences Data:', absencesData);
-console.log('Performances Data:', performancesData);
-console.log('Days of Week:', daysOfWeek);
-
-    // Données des absences et des performances
-    const absencesData = @json($absenceData);
-    const performancesData = @json($performanceData);
-    const daysOfWeek = @json($daysOfWeek);
-
-
-    var options = {
-    chart: {
-        type: 'line',
-        height: 350
-    },
-    series: [{
-        name: 'Test Series',
-        data: [10, 20, 30, 40, 50, 60, 70]
-    }],
-    xaxis: {
-        categories: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-    }
-};
-
-var chart = new ApexCharts(document.querySelector("#absencesChart"), options);
-chart.render();
-
-    // Configuration du graphique des absences
-    var absencesChartOptions = {
-        chart: {
-            type: 'line',
-            height: 350,
-        },
-        series: [{
-            name: 'Absences',
-            data: absencesData
-        }],
-        xaxis: {
-            categories: daysOfWeek
-        },
-        title: {
-            text: 'Absences par semaine',
-            align: 'center'
-        },
-    };
-
-    // Configuration du graphique des performances
-    var performancesChartOptions = {
-        chart: {
-            type: 'line',
-            height: 350,
-        },
-        series: [{
-            name: 'Performances moyennes',
-            data: performancesData
-        }],
-        xaxis: {
-            categories: daysOfWeek
-        },
-        title: {
-            text: 'Performances moyennes par semaine',
-            align: 'center'
-        },
-    };
-
-    // Initialisation des graphiques
-    var absencesChart = new ApexCharts(document.querySelector("#absencesChart"), absencesChartOptions);
-    var performancesChart = new ApexCharts(document.querySelector("#performancesChart"), performancesChartOptions);
-
-    absencesChart.render();
-    performancesChart.render();
-</script>
 @endsection
