@@ -13,7 +13,7 @@
     @vite(['resources/sass/style.scss'])
 
     @yield('head')
-
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 </head>
 
@@ -43,6 +43,9 @@
         </div>
       @include('admin.layouts.components.footer')
     </div>
+
+   
+    
 
     @vite(['resources/js/app.js'])
 </body>

@@ -1,11 +1,6 @@
 <div class="sidebar sidebar-dark sidebar-fixed" id="sidebar" style="background-color: #212631;">
     <div class="sidebar-brand d-none d-md-flex">
-        <svg class="sidebar-brand-full" width="118" height="46" alt="CoreUI Logo">
-            <use xlink:href="{{ asset('assets/brand/coreui.svg#signet') }}"></use> 
-        </svg>
-        <svg class="sidebar-brand-narrow" width="46" height="46" alt="CoreUI Logo">
-            <use xlink:href="{{ asset('assets/brand/coreui.svg#signet') }}"></use>
-        </svg>
+      
     </div>
     
     <style>
@@ -34,26 +29,13 @@
             <a class="nav-link active" href="{{ route('admin.dashboard') }}">
                 <x-coreui-icon class="nav-icon" icon="cil-speedometer" />
                 Dashboard
-                <span class="badge badge-sm bg-info ms-auto">NEW</span>
+                
             </a>
         </li>
 
         <!-- Employee Management -->
         <li class="nav-title">Employee Management</li>
-        <li class="nav-group">
-            <a class="nav-link nav-group-toggle" href="#">
-                <x-coreui-icon class="nav-icon" icon="cil-user" />
-                Profile
-            </a>
-            <ul class="nav-group-items">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('admin.profile.edit') }}">
-                        <x-coreui-icon class="nav-icon" icon="cil-pencil" />
-                        Edit Profile
-                    </a>
-                </li>
-            </ul>
-        </li>
+
 
         <li class="nav-group">
             <a class="nav-link nav-group-toggle" href="#">

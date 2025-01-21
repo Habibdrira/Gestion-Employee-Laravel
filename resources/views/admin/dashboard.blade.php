@@ -1,15 +1,13 @@
 @extends('admin.layouts.app')
 
-
 @section('breadcrum')
 <div class="container-fluid">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb my-0 ms-2">
             <li class="breadcrumb-item">
-                <!-- if breadcrumb is single--><span>Home</span>
+                <span>Home</span>
             </li>
             <li class="breadcrumb-item active"><span>Dashboard</span></li>
-
         </ol>
     </nav>
 </div>
@@ -28,16 +26,35 @@
                         <div>{{ $card['label'] }}</div>
                     </div>
                 </div>
-                <div class="c-chart-wrapper mt-3 mx-3" style="height:70px;">
-                    <canvas class="chart" id="{{ $card['chart_id'] }}" height="70"></canvas>
-                </div>
             </div>
         </div>
     @endforeach
 </div>
 
+<!-- Courbes des absences et des performances par semaine -->
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">Absences par semaine</div>
+            <div class="card-body">
+                <div id="absencesChart"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">Performances moyennes par semaine</div>
+            <div class="card-body">
+                <div id="performancesChart"></div>
+            </div>
+        </div>
+    </div>
+</div>
 
-<table class="table border mb-0">
+
+
+<!-- Tableau des employés -->
+<table class="table border mb-0 mt-4">
     <thead class="table-light fw-semibold">
         <tr class="align-middle">
             <th>#</th>
@@ -71,11 +88,83 @@
         @endforeach
     </tbody>
 </table>
+@endsection
 
 
-        
-    </div>
-    <!-- /.col-->
-</div>
-<!-- /.row-->
+
+@section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+<script>
+    console.log('Absences Data:', absencesData);
+console.log('Performances Data:', performancesData);
+console.log('Days of Week:', daysOfWeek);
+
+    // Données des absences et des performances
+    const absencesData = @json($absenceData);
+    const performancesData = @json($performanceData);
+    const daysOfWeek = @json($daysOfWeek);
+
+
+    var options = {
+    chart: {
+        type: 'line',
+        height: 350
+    },
+    series: [{
+        name: 'Test Series',
+        data: [10, 20, 30, 40, 50, 60, 70]
+    }],
+    xaxis: {
+        categories: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    }
+};
+
+var chart = new ApexCharts(document.querySelector("#absencesChart"), options);
+chart.render();
+
+    // Configuration du graphique des absences
+    var absencesChartOptions = {
+        chart: {
+            type: 'line',
+            height: 350,
+        },
+        series: [{
+            name: 'Absences',
+            data: absencesData
+        }],
+        xaxis: {
+            categories: daysOfWeek
+        },
+        title: {
+            text: 'Absences par semaine',
+            align: 'center'
+        },
+    };
+
+    // Configuration du graphique des performances
+    var performancesChartOptions = {
+        chart: {
+            type: 'line',
+            height: 350,
+        },
+        series: [{
+            name: 'Performances moyennes',
+            data: performancesData
+        }],
+        xaxis: {
+            categories: daysOfWeek
+        },
+        title: {
+            text: 'Performances moyennes par semaine',
+            align: 'center'
+        },
+    };
+
+    // Initialisation des graphiques
+    var absencesChart = new ApexCharts(document.querySelector("#absencesChart"), absencesChartOptions);
+    var performancesChart = new ApexCharts(document.querySelector("#performancesChart"), performancesChartOptions);
+
+    absencesChart.render();
+    performancesChart.render();
+</script>
 @endsection

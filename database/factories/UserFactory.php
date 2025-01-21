@@ -1,7 +1,7 @@
 <?php
-
 namespace Database\Factories;
 
+use App\Models\Role;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -11,23 +11,30 @@ use Illuminate\Support\Str;
 class UserFactory extends Factory
 {
     /**
-     * Define the model's default state.
+     * Définit l'état par défaut du modèle.
      *
      * @return array<string, mixed>
      */
     public function definition(): array
     {
+        // Assurez-vous que le rôle avec l'ID 2 existe dans la base de données
+        $roleId = 2; // Le rôle avec l'ID 2 est attribué par défaut
+    
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'name' => $this->faker->firstName(),
+            'lastname' => $this->faker->lastName(),
+            'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+            'password' => bcrypt('password'),
             'remember_token' => Str::random(10),
+            'status' => $this->faker->randomElement(['active', 'inactive']),
+            'role_id' => $roleId, // Attribution du role_id par défaut à 2
         ];
     }
+    
 
     /**
-     * Indicate that the model's email address should be unverified.
+     * Indique que l'adresse email du modèle doit être non vérifiée.
      */
     public function unverified(): static
     {

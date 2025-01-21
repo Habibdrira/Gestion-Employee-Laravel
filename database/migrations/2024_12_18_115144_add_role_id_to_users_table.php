@@ -21,7 +21,7 @@ return new class extends Migration
 
         // Insérer des utilisateurs par défaut avec les rôles 1 (Admin) et 2 (Employee)
         DB::table('users')->insert([
-            [   'id' => '30',
+            [   'id' => '1',
                 'name' => 'Admin',
                 'lastname' => 'admin',
                 'email' => 'admin@example.com',
@@ -31,7 +31,7 @@ return new class extends Migration
                 'updated_at' => now(),
             ],
             [    
-                'id' => '31',
+                'id' => '2',
                 'name' => 'Employee',
                 'lastname' => 'Employee',
                 'email' => 'employee@example.com',

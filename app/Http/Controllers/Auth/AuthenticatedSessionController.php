@@ -11,6 +11,7 @@ use Illuminate\View\View;
 use App\Http\Controllers\StatusController;
 use App\Models\WorkMinute;
 use Carbon\Carbon;
+use App\Models\user;
 
 class AuthenticatedSessionController extends Controller
 {
@@ -61,11 +62,11 @@ class AuthenticatedSessionController extends Controller
             // Mettre à jour le statut de l'utilisateur en "offline"
             $status_user = StatusUser::where('user_id', $user->id)->first();
 
-            if ($status_user->status == 'active') {
+           /* if ($status_user->status == 'active') {
                 $this->calculateAndStoreMinutes($user, $status_user->start_time, now());
                 $status_user->start_time = null; // Réinitialiser l'heure de début
             }
-
+*/
             if ($status_user) {
                 $status_user->status = 'offline';
                 $status_user->end_time = now(); // Enregistrer l'heure de fin
