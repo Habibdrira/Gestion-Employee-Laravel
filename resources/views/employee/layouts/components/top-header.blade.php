@@ -26,47 +26,47 @@
             </li>
         </ul>
 
+<!-- Dropdown pour changer le statut (affiché uniquement pour les employés) -->
+<ul class="header-nav ms-3">
+    @if(auth()->user()->employee) <!-- Vérifie si l'utilisateur est un employé -->
+        <li class="nav-item dropdown">
+            <a class="nav-link py-0" data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
+                <x-coreui-icon class="icon me-2" icon="cil-options" />
+                <span class="fw-semibold">Change Status</span>
+            </a>
 
+            <div class="dropdown-menu dropdown-menu-end p-3">
+                <form action="{{ route('update.status') }}" method="POST">
+                    @csrf
 
-        <!-- Dropdown pour changer le statut -->
-        <ul class="header-nav ms-3">
-            <li class="nav-item dropdown">
-                <a class="nav-link py-0" data-coreui-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">
-                    <x-coreui-icon class="icon me-2" icon="cil-options" />
-                    <span class="fw-semibold">Change Status</span>
-                </a>
+                    <div class="form-group">
+                        <label for="status">Current Status:</label>
+                        <span class="badge
+                            {{
+                                auth()->user()->employee->statusEmployee && auth()->user()->employee->statusEmployee->status === 'active' ? 'bg-success' :
+                                (auth()->user()->employee->statusEmployee && auth()->user()->employee->statusEmployee->status === 'offline' ? 'bg-danger' :
+                                (auth()->user()->employee->statusEmployee && auth()->user()->employee->statusEmployee->status === 'busy' ? 'bg-warning' : 'bg-secondary'))
+                            }}">
+                            {{ ucfirst(auth()->user()->employee->statusEmployee ? auth()->user()->employee->statusEmployee->status : 'offline') }}
+                        </span>
+                    </div>
 
-                <div class="dropdown-menu dropdown-menu-end p-3">
-                    <form action="{{ route('update.status') }}" method="POST">
-                        @csrf
+                    <!-- Sélection du nouveau statut -->
+                    <div class="form-group mt-3">
+                        <label for="status">Choose New Status</label>
+                        <select name="status" class="form-control">
+                            <option value="active" {{ auth()->user()->employee->statusEmployee && auth()->user()->employee->statusEmployee->status === 'active' ? 'selected' : '' }} class="bg-success">Active</option>
+                            <option value="offline" {{ auth()->user()->employee->statusEmployee && auth()->user()->employee->statusEmployee->status === 'offline' ? 'selected' : '' }} class="bg-danger">Offline</option>
+                            <option value="busy" {{ auth()->user()->employee->statusEmployee && auth()->user()->employee->statusEmployee->status === 'busy' ? 'selected' : '' }} class="bg-warning">Busy</option>
+                        </select>
+                    </div>
 
-                        <div class="form-group">
-                            <label for="status">Current Status:</label>
-                            <span class="badge
-                                {{
-                                    auth()->user()->statusUser && auth()->user()->statusUser->status === 'active' ? 'bg-success' :
-                                    (auth()->user()->statusUser && auth()->user()->statusUser->status === 'offline' ? 'bg-danger' :
-                                    (auth()->user()->statusUser && auth()->user()->statusUser->status === 'busy' ? 'bg-warning' : 'bg-secondary'))
-                                }}">
-                                {{ ucfirst(auth()->user()->statusUser ? auth()->user()->statusUser->status : 'offline') }}
-                            </span>
-                        </div>
-
-                        <!-- Sélection du nouveau statut -->
-                        <div class="form-group mt-3">
-                            <label for="status">Choose New Status</label>
-                            <select name="status" class="form-control">
-                                <option value="active" {{ auth()->user()->statusUser && auth()->user()->statusUser->status === 'active' ? 'selected' : '' }} class="bg-success">Active</option>
-                                <option value="offline" {{ auth()->user()->statusUser && auth()->user()->statusUser->status === 'offline' ? 'selected' : '' }} class="bg-danger">Offline</option>
-                                <option value="busy" {{ auth()->user()->statusUser && auth()->user()->statusUser->status === 'busy' ? 'selected' : '' }} class="bg-warning">Busy</option>
-                            </select>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary mt-3">Update Status</button>
-                    </form>
-                </div>
-            </li>
-        </ul>
+                    <button type="submit" class="btn btn-primary mt-3">Update Status</button>
+                </form>
+            </div>
+        </li>
+    @endif
+</ul>
 
       <!-- Menu de l'utilisateur avec avatar et options -->
       <ul class="header-nav ms-3">
@@ -78,14 +78,15 @@
                     </div>
                     <!-- Affichage du statut avec une couleur différente -->
                     <span class="badge
-                        {{
-                            auth()->user()->statusUser && auth()->user()->statusUser->status === 'active' ? 'bg-success' :
-                            (auth()->user()->statusUser && auth()->user()->statusUser->status === 'offline' ? 'bg-danger' :
-                            (auth()->user()->statusUser && auth()->user()->statusUser->status === 'busy' ? 'bg-warning' : 'bg-secondary'))
-                        }}"
-                        style="font-size: 14px;">
-                        {{ ucfirst(auth()->user()->statusUser ? auth()->user()->statusUser->status : 'offline') }}
-                    </span>
+                    {{
+                        auth()->user()->employee && auth()->user()->employee->statusEmployee && auth()->user()->employee->statusEmployee->status === 'active' ? 'bg-success' :
+                        (auth()->user()->employee && auth()->user()->employee->statusEmployee && auth()->user()->employee->statusEmployee->status === 'offline' ? 'bg-danger' :
+                        (auth()->user()->employee && auth()->user()->employee->statusEmployee && auth()->user()->employee->statusEmployee->status === 'busy' ? 'bg-warning' : 'bg-secondary'))
+                    }}"
+                    style="font-size: 14px;">
+                    {{ ucfirst(auth()->user()->employee && auth()->user()->employee->statusEmployee ? auth()->user()->employee->statusEmployee->status : 'offline') }}
+                </span>
+                
                 </div>
             </a>
 

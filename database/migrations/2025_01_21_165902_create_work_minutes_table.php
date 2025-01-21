@@ -1,5 +1,4 @@
 <?php
-// Migration pour créer la table `work_minutes` dans database/migrations/YYYY_MM_DD_create_work_minutes_table.php
 
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -10,14 +9,23 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
         Schema::create('work_minutes', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->unsignedBigInteger('employee_id'); // Clé étrangère
             $table->integer('minutes_worked'); // Nombre de minutes travaillées
-            $table->enum('day', range(1, 31))->comment('Jour du mois');
+            $table->enum('day', [
+                'Monday', 'Tuesday', 'Wednesday', 'Thursday', 
+                'Friday', 'Saturday', 'Sunday'
+            ])->comment('Jour de la semaine');
             $table->timestamps();
+
+            // Définir la clé étrangère correctement
+            $table->foreign('employee_id')
+                  ->references('employee_id') // Nom exact de la clé primaire dans employees
+                  ->on('employees')
+                  ->onDelete('cascade');
         });
     }
 

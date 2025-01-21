@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('city')->nullable();
             $table->string('position')->nullable();
             $table->decimal('salary', 8, 2)->nullable();
+            $table->enum('status', ['active', 'offline', 'busy'])->default('offline');
             $table->timestamps();
 
             // Définir la relation de clé étrangère

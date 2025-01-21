@@ -43,7 +43,7 @@ class AdminController extends Controller
             ],
             [
                 'color' => 'success',
-                'value' => $totalPrimes . ' $',
+                'value' => $totalPrimes .'DT',
                 'percentage' => '',
                 'arrow' => '',
                 'label' => 'Total Primes',

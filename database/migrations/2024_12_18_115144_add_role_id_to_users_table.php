@@ -30,16 +30,7 @@ return new class extends Migration
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            [    
-                'id' => '2',
-                'name' => 'Employee',
-                'lastname' => 'Employee',
-                'email' => 'employee@example.com',
-                'password' => Hash::make('employee123'), // Hachage du mot de passe
-                'role_id' => 2, // Rôle Employee
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+        
         ]);
     }
 
