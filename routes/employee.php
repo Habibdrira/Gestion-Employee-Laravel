@@ -126,8 +126,6 @@ Route::middleware('auth')->prefix('employee')->name('employee.')->group(function
 
 Route::middleware('auth')->prefix('fichepaie')->name('employee.')->group(function () {
     Route::get('/fichepaies', [FichePaieController::class, 'index'])->name('fichepaie.index');
-
     Route::get('/fichepaies/salary/{employeeId}', [FichePaieController::class, 'salary'])->name('fichepaie.salary');
-    Route::get('/fichepaies/download/{employeeId}', [FichePaieController::class, 'download'])
-    ->name('fichepaie.downloadSalary');
+  
 });

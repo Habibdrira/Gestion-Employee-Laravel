@@ -123,12 +123,19 @@
     </a>
     <ul class="nav-group-items">
 
+
+        <li class="nav-item"><a class="nav-link" href="{{ route('employee.fichepaie.index') }}">
+            <x-coreui-icon class="nav-icon" icon="cil-pen" />
+            Mes Fiches de Paie</a></li>
         <li class="nav-item">
+            
             <a class="nav-link" href="{{ route('employee.fichepaie.salary', ['employeeId' => auth()->user()->employee->employee_id]) }}">
                 <x-coreui-icon class="nav-icon" icon="cil-dollar" />
-                Salaire Ajusté
+                Salaire 
             </a>
         </li> 
+        
+        
 
     </ul>
 </li>

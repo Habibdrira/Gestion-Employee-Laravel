@@ -15,6 +15,12 @@ class Employee extends Model
 
 
 
+    public function fichepaies()
+    {
+        return $this->hasMany(Employee::class, 'employee_id', 'employee_id');
+
+    }
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id'); // Relie `user_id` de `employees` à `id` de `users`

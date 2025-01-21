@@ -17,7 +17,12 @@ class FichePaie extends Model
         'penalite_absence', // Ajouter ce champ pour représenter la pénalité des absences
 
     ];
+    
 
+    public function employee()
+    {
+        return $this->belongsTo(Employee::class, 'employee_id', 'employee_id');
+    }
 
    // Relation avec l'utilisateur
    public function user()
