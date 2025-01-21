@@ -1,29 +1,45 @@
-<div class="sidebar sidebar-dark sidebar-fixed" id="sidebar" style="background-color: #212631;">
+<div class="sidebar sidebar-dark sidebar-fixed" id="sidebar" style="background-color: #00192f;">
     <div class="sidebar-brand d-none d-md-flex">
-        <svg class="sidebar-brand-full" width="118" height="46" alt="CoreUI Logo">
-            <use xlink:href="#"></use>
-        </svg>
-        <svg class="sidebar-brand-narrow" width="46" height="46" alt="CoreUI Logo">
-            <use xlink:href="{{ asset('assets/brand/coreui.svg#signet') }}"></use>
-        </svg>
+        <!-- Ajout de l'image PNG -->
+        <img 
+            src="{{ asset('assets/img/logobd.jpg') }}" 
+            alt="Logo BD" 
+            class="sidebar-brand-full" 
+            width="200" 
+            height="100" 
+            style="object-fit: contain;"
+        >
     </div>
     
     <style>
+        .sidebar {
+            background-color: #00192f;
+        }
+
         .sidebar-nav .nav-link {
-            background-color: #212631;
+            background-color: transparent;
             color: #ffffff;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .sidebar-nav .nav-link:hover,
         .sidebar-nav .nav-link:focus,
         .sidebar-nav .nav-link.active {
-            background-color: #2b343d; /* Couleur pour l'état actif ou survolé */
+            background-color: #002d47; /* Couleur survolée ou active */
             color: #ffffff;
         }
 
         .sidebar-nav .nav-group-toggle {
-            background-color: #212631;
             color: #ffffff;
+            background-color: transparent;
+        }
+
+        .sidebar-nav .nav-group-toggle:hover {
+            background-color: #002d47;
+        }
+
+        .sidebar-brand img {
+            margin: 0 auto;
         }
     </style>
 
@@ -40,20 +56,7 @@
 
         <!-- Employee Management -->
         <li class="nav-title">BesideYou </li>
-        <li class="nav-group">
-            <a class="nav-link nav-group-toggle" href="#">
-                <x-coreui-icon class="nav-icon" icon="cil-user" />
-                Profile
-            </a>
-            <ul class="nav-group-items">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ route('employee.profile.edit') }}">
-                        <x-coreui-icon class="nav-icon" icon="cil-pencil" />
-                        Edit Profile
-                    </a>
-                </li>
-            </ul>
-        </li>
+
 
 
                 <!-- Congé Section -->

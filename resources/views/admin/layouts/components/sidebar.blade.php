@@ -1,25 +1,47 @@
-<div class="sidebar sidebar-dark sidebar-fixed" id="sidebar" style="background-color: #212631;">
+<div class="sidebar sidebar-dark sidebar-fixed" id="sidebar" style="background-color: #00192f;">
+    <!-- Sidebar Brand Section -->
     <div class="sidebar-brand d-none d-md-flex">
-      
+        <!-- Ajout de l'image -->
+        <img 
+        src="{{ asset('assets/img/logobd.jpg') }}" 
+        alt="Logo BD" 
+        class="sidebar-brand-full" 
+        width="200" 
+        height="100" 
+        style="object-fit: contain;"
+    >
     </div>
-    
+
+    <!-- Styles pour la sidebar -->
     <style>
-        .sidebar-nav .nav-link {
-            background-color: #212631;
+      
+      .sidebar-nav .nav-link {
+            background-color: transparent;
             color: #ffffff;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .sidebar-nav .nav-link:hover,
         .sidebar-nav .nav-link:focus,
         .sidebar-nav .nav-link.active {
-            background-color: #2b343d; /* Couleur pour l'état actif ou survolé */
+            background-color: #002d47; /* Couleur survolée ou active */
             color: #ffffff;
         }
 
         .sidebar-nav .nav-group-toggle {
-            background-color: #212631;
             color: #ffffff;
+            background-color: transparent;
         }
+
+        .sidebar-nav .nav-group-toggle:hover {
+            background-color: #002d47;
+        }
+
+        /* Image style (optionnel) */
+       .sidebar-brand img {
+            margin: 0 auto;
+        }
+        
     </style>
 
     <ul class="sidebar-nav" data-coreui="navigation" data-simplebar>
