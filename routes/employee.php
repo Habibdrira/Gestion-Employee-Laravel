@@ -21,7 +21,10 @@ use App\Http\Controllers\PrimeController;
 
 use App\Http\Controllers\Employee\FichePaieController;
 
+use App\Http\Controllers\Employee\StatusEmployeeController;
 
+
+Route::post('/employee/status/update', [StatusEmployeeController::class, 'updateStatus'])->name('update.status');
 
 Route::prefix('employee')->group(function () {
     Route::get('/dashboard', [EmployeeController::class,'index'])->middleware(['auth', 'verified'])->name('employee.dashboard');
