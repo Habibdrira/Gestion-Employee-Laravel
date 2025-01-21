@@ -57,60 +57,61 @@ class AdminController extends Controller
      * @return array
      */
     private function getAbsencesByWeek()
-    {
-        // Récupérer les absences des 7 derniers jours
-        $startOfWeek = Carbon::now()->subWeek()->startOfWeek();
-        $endOfWeek = Carbon::now()->subWeek()->endOfWeek();
-        $absences = Absence::whereBetween('date', [$startOfWeek, $endOfWeek])->get();
+{
+    // Récupérer les absences de la semaine en cours
+    $startOfWeek = Carbon::now()->startOfWeek(); // Premier jour de cette semaine (par défaut, lundi)
+    $endOfWeek = Carbon::now()->endOfWeek(); // Dernier jour de cette semaine (dimanche)
 
-        // Agréger les absences par jour de la semaine
-        $absenceCountsByDay = $absences->groupBy(function($date) {
-            return Carbon::parse($date->date)->format('l'); // Récupère le jour de la semaine
-        });
+    // Récupérer les absences dans l'intervalle de la semaine en cours
+    $absences = Absence::whereBetween('date', [$startOfWeek, $endOfWeek])->get();
 
-        // Calculer le nombre d'absences par jour
-        $daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        $absenceData = [];
-        
-        foreach ($daysOfWeek as $day) {
-            $absenceData[] = $absenceCountsByDay->has($day) ? $absenceCountsByDay->get($day)->count() : 0;
-        }
+    // Agréger les absences par jour de la semaine
+    $absenceCountsByDay = $absences->groupBy(function($absence) {
+        return Carbon::parse($absence->date)->format('l'); // Récupère le jour de la semaine (lundi, mardi, etc.)
+    });
 
-        return [$absenceData, $daysOfWeek];
+    // Initialiser les jours de la semaine
+    $daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    $absenceData = [];
+
+    // Calculer le nombre d'absences par jour
+    foreach ($daysOfWeek as $day) {
+        // Vérifier si des absences existent pour ce jour-là et récupérer le nombre d'absences
+        $absenceData[] = $absenceCountsByDay->has($day) ? $absenceCountsByDay->get($day)->count() : 0;
     }
 
+    return [$absenceData, $daysOfWeek];
+}
 
-    private function getPerformanceByWeek()
-    {
-        // Récupérer les performances des 7 derniers jours
-        $startOfWeek = Carbon::now()->subWeek()->startOfWeek();
-        $endOfWeek = Carbon::now()->subWeek()->endOfWeek();
-        $performances = Performance::whereBetween('date', [$startOfWeek, $endOfWeek])->get();
 
-        // Agréger les performances par jour de la semaine
-        $performanceCountsByDay = $performances->groupBy(function($performance) {
-            return Carbon::parse($performance->date)->format('l'); // Récupère le jour de la semaine
-        });
+private function getPerformanceByWeek()
+{
+    // Récupérer les performances de la semaine en cours
+    $startOfWeek = Carbon::now()->startOfWeek(); // Premier jour de cette semaine (par défaut, lundi)
+    $endOfWeek = Carbon::now()->endOfWeek(); // Dernier jour de cette semaine (dimanche)
 
-        // Calculer la moyenne des performances par jour
-        $daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-        $performanceData = [];
-        
-        foreach ($daysOfWeek as $day) {
-            $performancesOnDay = $performanceCountsByDay->has($day) ? $performanceCountsByDay->get($day) : collect();
-            $performanceData[] = $performancesOnDay->avg('rating'); // Calcul de la moyenne des performances
-        }
+    // Récupérer les performances dans l'intervalle de la semaine en cours
+    $performances = Performance::whereBetween('date', [$startOfWeek, $endOfWeek])->get();
 
-        return $performanceData;
+    // Agréger les performances par jour de la semaine
+    $performanceCountsByDay = $performances->groupBy(function($performance) {
+        return Carbon::parse($performance->date)->format('l'); // Récupère le jour de la semaine
+    });
+
+    // Initialiser les jours de la semaine
+    $daysOfWeek = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    $performanceData = [];
+
+    // Calculer la moyenne des performances par jour
+    foreach ($daysOfWeek as $day) {
+        // Vérifier s'il y a des performances pour ce jour-là
+        $performancesOnDay = $performanceCountsByDay->has($day) ? $performanceCountsByDay->get($day) : collect();
+        // Calcul de la moyenne des performances pour ce jour
+        $performanceData[] = $performancesOnDay->avg('rating');
     }
 
-
-
-
-
-
-
-
+    return $performanceData;
+}
 
 
     private function getCardData()

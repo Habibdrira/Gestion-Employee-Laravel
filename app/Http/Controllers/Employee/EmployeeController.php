@@ -51,25 +51,24 @@ return view('employee.dashboard', compact('notifications', 'primes', 'performanc
         return redirect()->route('login')->with('error', 'Veuillez vous connecter.');
     }
     }
-
     private function getWeeklyAbsenceData()
     {
-        // Récupérer les absences de l'employé courant
+        // Récupérer les absences de l'employé courant pour cette semaine
         $absences = $this->getEmployeeAbsences();
-
-        // Organiser les absences par semaine
+    
+        // Organiser les absences par jour de la semaine
         $weeklyAbsenceData = $absences->groupBy(function($absence) {
-            return Carbon::parse($absence->date)->format('W'); // Récupère la semaine de l'année
+            return Carbon::parse($absence->date)->format('l'); // Récupère le jour de la semaine
         });
-
-        // Calculer la somme des durées d'absences par semaine
-        return $weeklyAbsenceData->map(function ($week) {
-            return $week->sum('duration'); // Somme des durées des absences par semaine
+    
+        // Calculer la somme des durées d'absences par jour de la semaine
+        return $weeklyAbsenceData->map(function ($day) {
+            return $day->sum('duration'); // Somme des durées des absences pour chaque jour
         });
     }
-
+    
     /**
-     * Récupérer les absences de l'employé courant.
+     * Récupérer les absences de l'employé courant pour cette semaine.
      */
     private function getEmployeeAbsences()
     {
@@ -80,22 +79,22 @@ return view('employee.dashboard', compact('notifications', 'primes', 'performanc
     
     private function getWeeklyPerformanceData()
     {
-        // Récupérer les performances de l'employé courant
+        // Récupérer les performances de l'employé courant pour cette semaine
         $performances = $this->getEmployeePerformances();
-
-        // Organiser les performances par semaine
+    
+        // Organiser les performances par jour de la semaine
         $weeklyPerformanceData = $performances->groupBy(function($performance) {
-            return Carbon::parse($performance->date)->format('W'); // Récupère la semaine de l'année
+            return Carbon::parse($performance->date)->format('l'); // Récupère le jour de la semaine
         });
-
-        // Calculer la moyenne des performances par semaine
-        return $weeklyPerformanceData->map(function ($week) {
-            return $week->avg('rating'); // Moyenne des performances par semaine
+    
+        // Calculer la moyenne des performances par jour de la semaine
+        return $weeklyPerformanceData->map(function ($day) {
+            return $day->avg('rating'); // Moyenne des performances pour chaque jour
         });
     }
-
+    
     /**
-     * Récupérer les performances de l'employé courant.
+     * Récupérer les performances de l'employé courant pour cette semaine.
      */
     private function getEmployeePerformances()
     {
@@ -103,7 +102,7 @@ return view('employee.dashboard', compact('notifications', 'primes', 'performanc
             ->whereBetween('date', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
             ->get();
     }
-
+    
     public function indexAdmin()
     {
         $employees = Employee::with('user')->get();
