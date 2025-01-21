@@ -43,6 +43,7 @@
 </div>
 
 
+
 <!-- Tableau des employés -->
 <table class="table border mb-0 mt-4">
     <thead class="table-light fw-semibold">
@@ -79,7 +80,6 @@
                 <td>
                     {{ number_format($employee->salary, 2) }} TND <!-- Affichage du salaire -->
                 </td>
-                <!-- Affichage du statut avec coloration -->
                 <td>
                     @if($employee->status == 'active')
                         <span class="badge bg-success">Active</span>
@@ -91,5 +91,4 @@
         @endforeach
     </tbody>
 </table>
-
 @endsection

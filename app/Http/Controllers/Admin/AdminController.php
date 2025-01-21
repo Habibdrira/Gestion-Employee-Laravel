@@ -8,22 +8,31 @@ use App\Models\Performance;
 use App\Models\Employee;
 use App\Models\Absence;
 use App\Models\Prime;
+use App\Models\WorkMinute;
 use Carbon\Carbon;
 
 class AdminController extends Controller
 {
+
     public function index()
-    {
-        // Appel des méthodes pour obtenir les données nécessaires
-        $cards = $this->getCardData();
-        $employees = $this->getEmployees();
-        list($absenceData, $daysOfWeek) = $this->getAbsencesByWeek();
+{
+    // Appel des méthodes pour obtenir les données nécessaires
+    $cards = $this->getCardData();
+    $employees = $this->getEmployees();
+    list($absenceData, $daysOfWeek) = $this->getAbsencesByWeek();
+    $performanceData = $this->getPerformanceByWeek();
+    list($workMinutesData, $daysOfWeek) = WorkMinute::getWorkMinutesByDay();  // Appel à la méthode pour récupérer les minutes de travail
+    
+    // Générer les semaines de l'année (par exemple, 52 semaines)
+    $weeks = range(1, 52);  // Génère un tableau de 1 à 52 pour les semaines de l'année
+    
+    // Transmettre les données à la vue
+    return view('admin.dashboard', compact('cards', 'employees', 'absenceData', 'daysOfWeek', 'performanceData', 'workMinutesData', 'weeks'));
+}
 
-        $performanceData = $this->getPerformanceByWeek(); // Ajouter ici
+// Dans le modèle WorkMinute.php
 
-        // Transmettre les données à la vue
-        return view('admin.dashboard', compact('cards', 'employees', 'absenceData', 'daysOfWeek', 'performanceData'));
-    }
+
 
     /**
      * Récupérer les données pour les cartes principales (total des employés, absences, primes, performance)

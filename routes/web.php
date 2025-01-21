@@ -9,13 +9,11 @@ Route::get('/', function () {
 });
 
 
-use App\Http\Controllers\ChartController;
 
-Route::get('/chart', [ChartController::class, 'index'])->name('chart.index');
+use App\Http\Controllers\AbsenceController;
 
-
-
-
+// Définir la route pour afficher les absences
+Route::get('/absences', [AbsenceController::class, 'showAbsences'])->name('absences');
 
 
 

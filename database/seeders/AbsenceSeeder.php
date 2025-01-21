@@ -19,7 +19,7 @@ class AbsenceSeeder extends Seeder
         $faker = Faker::create(); // Crée une instance de Faker
 
         // Pour insérer des absences pour les employés existants
-        for ($i = 2; $i <= 10; $i++) { // L'ID de l'employé est de 2 à 20
+        for ($i = 5; $i <= 10; $i++) { // L'ID de l'employé est de 2 à 20
             $employee = Employee::find($i); // Trouver un employé par ID
 
             if ($employee) {

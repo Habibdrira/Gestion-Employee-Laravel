@@ -18,7 +18,7 @@ class EmployeeSeeder extends Seeder
         $faker = Faker::create(); // Crée une instance de Faker
         
         // Pour insérer de manière ordonnée de 1 à 20
-        for ($i = 2; $i <= 10; $i++) {
+        for ($i = 5; $i <= 10; $i++) {
             // Vérifiez si l'utilisateur avec ce ID existe
             $user = User::find($i);
 

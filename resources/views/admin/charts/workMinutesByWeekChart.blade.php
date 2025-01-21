@@ -1,19 +1,19 @@
-<!-- resources/views/admin/charts/absenceChart.blade.php -->
+<!-- resources/views/admin/charts/workMinutesByWeekChart.blade.php -->
 <div style="width: 600px; height: 400px;">
-    <canvas id="absenceChart"></canvas>
+    <canvas id="workMinutesByWeekChart"></canvas>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const ctx = document.getElementById('absenceChart').getContext('2d');
-    const absenceChart = new Chart(ctx, {
-        type: 'line', // Type de graphique
+    const ctx = document.getElementById('workMinutesByWeekChart').getContext('2d');
+    const workMinutesByWeekChart = new Chart(ctx, {
+        type: 'line', // Type de graphique (ligne)
         data: {
-            labels: @json($daysOfWeek), // Jours de la semaine
+            labels: @json($weeksOfYear), // Semaines de l'année
             datasets: [{
-                label: 'Absences par jour',
-                data: @json($absenceData), // Données d'absences
-                borderColor: 'rgb(75, 192, 192)', // Couleur de la ligne
+                label: 'Minutes de travail par semaine',
+                data: @json($workMinutesByWeekData), // Données des minutes de travail par semaine
+                borderColor: 'rgb(54, 162, 235)', // Couleur de la ligne
                 tension: 0.1, // Tension de la ligne (courbure)
                 fill: false
             }]
@@ -28,7 +28,7 @@
                 tooltip: {
                     callbacks: {
                         label: function(tooltipItem) {
-                            return tooltipItem.raw + ' absences';
+                            return tooltipItem.raw + ' minutes';
                         }
                     }
                 }
@@ -36,4 +36,3 @@
         }
     });
 </script>
-
