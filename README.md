@@ -1,4 +1,4 @@
-# How to setup or config this
+# How to setup or config  this project 
 
 ## For windows
 
