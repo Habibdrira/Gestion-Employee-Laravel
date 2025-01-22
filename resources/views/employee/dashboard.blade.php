@@ -68,4 +68,22 @@
         </div>
     </div>
 </div>
+
+<!-- Deux graphiques côte à côte -->
+<div class="row">
+    <div class="col-md-6">
+        @include('employee.weeklyPerformanceChart', ['weeklyPerformanceData' => $weeklyPerformanceData])
+    </div>
+
+    <div class="col-md-6">
+        @include('employee.weeklyAbsenceChart', ['weeklyAbsenceData' => $weeklyAbsenceData])
+    </div>
+</div>
+
+<!-- Lien vers la page des absences -->
+<div class="row">
+    <div class="col-12">
+        <a href="{{ route('absences') }}" class="btn btn-primary">Voir le graphique des absences</a>
+    </div>
+</div>
 @endsection

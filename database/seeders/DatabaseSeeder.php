@@ -20,6 +20,10 @@ class DatabaseSeeder extends Seeder
         AbsenceSeeder::class, // Ajoutez ceci pour appeler le seeder AbsenceSeeder
         PerformanceSeeder::class,
         PrimeSeeder::class,
+        DemandeCongeSeeder::class,
+        StatusEmployeeSeeder::class,
+        WorkMinuteSeeder::class,
+        
     ]);
 
 

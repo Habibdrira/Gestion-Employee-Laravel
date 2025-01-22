@@ -4,68 +4,66 @@
 
 @section('content')
 <!-- Section du graphique -->
-<div class="container mt-5">
-    <div class="d-flex justify-content-start mb-3">
-        <a href="{{ route('employee.dashboard') }}" class="text-decoration-underline text-dark">
-            ← Retour au Dashboard
-        </a>
-    </div>
-    <div class="row">
+<div class="container my-5">
+    <div class="row mb-4">
         <div class="col-12 text-center">
-            <h3>Mon nombre total de congés</h3>
+            <h2 class="fw-bold">🎯 Mon Bilan des Congés</h2>
         </div>
     </div>
 
-    <div style="display: flex; justify-content: center; align-items: center; height: 300px;">
-        <canvas id="congeChart" style="max-width: 200px; max-height: 200px;"></canvas>
+    <div class="d-flex justify-content-center align-items-center" style="height: 300px;">
+        <canvas id="congeChart" style="max-width: 250px; max-height: 250px;"></canvas>
     </div>
 
     <!-- Script pour afficher le graphique -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        window.onload = function() {
-            var ctx = document.getElementById('congeChart').getContext('2d');
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('congeChart').getContext('2d');
+            const congeUtilise = {{ $nbrjcongeUtilise }};
+            const nbrCongeTotal = {{ $nbrjcongeTotal }};
+            const restant = nbrCongeTotal - congeUtilise;
 
-            // Variables pour les données du graphique
-            var congeUtilise = {{ $nbrjcongeUtilise }}; // Jours de congé utilisés
-            var nbrCongeTotal = {{ $nbrjcongeTotal }}; // Nombre total de jours de congé
-            var restant = nbrCongeTotal - congeUtilise; // Congés restants
-
-            // Créer un graphique circulaire
-            var congeChart = new Chart(ctx, {
+            new Chart(ctx, {
                 type: 'pie',
                 data: {
                     labels: ['Congés utilisés', 'Congés restants'],
                     datasets: [{
                         data: [congeUtilise, restant],
-                        backgroundColor: ['#007bff', '#dc3545'], 
-                        borderColor: ['#007bff', '#dc3545'],
+                        backgroundColor: ['#007bff', '#28a745'],
+                        borderColor: ['#007bff', '#28a745'],
                         borderWidth: 1
                     }]
                 },
                 options: {
                     responsive: true,
-                    maintainAspectRatio: true, // Garder les proportions
+                    maintainAspectRatio: true,
                     plugins: {
                         legend: {
                             position: 'top',
-                            display: true // Afficher la légende
+                            labels: {
+                                font: {
+                                    size: 14,
+                                }
+                            }
                         },
                         tooltip: {
                             callbacks: {
                                 label: function(tooltipItem) {
-                                    return tooltipItem.label + ': ' + tooltipItem.raw + ' jours';
+                                    return `${tooltipItem.label}: ${tooltipItem.raw} jours`;
                                 }
                             }
                         }
                     }
                 }
             });
-        };
+        });
     </script>
+</div>
 
-    <!-- Section des demandes de congé -->
-    <h1 class="text-center mb-4">📋 Mes demandes de congé</h1>
+<!-- Section des demandes de congé -->
+<div class="container mt-5">
+    <h2 class="text-center mb-4">📋 Mes demandes de congé</h2>
 
     <!-- Message de succès -->
     @if(session('success'))
@@ -77,7 +75,7 @@
 
     <!-- Tableau des demandes -->
     <div class="table-responsive">
-        <table class="table table-hover table-bordered mt-4">
+        <table class="table table-hover table-bordered">
             <thead class="table-primary text-center">
                 <tr>
                     <th>Date de début</th>
@@ -106,11 +104,10 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" class="text-center">Aucune demande de congé trouvée.</td>
+                        <td colspan="4" class="text-center text-muted">Aucune demande de congé trouvée.</td>
                     </tr>
                 @endforelse
             </tbody>
-            
         </table>
     </div>
 </div>

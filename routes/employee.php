@@ -7,7 +7,7 @@ use App\Http\Controllers\Employee\DemandeCongeController;
 use App\Http\Controllers\LoanController;
 use App\Http\Controllers\Employee\PerformanceChartController;
 use App\Http\Controllers\StatusController;
-use App\Http\Controllers\AbsenceController;
+
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\MissionInternationalleController;
 use App\Http\Controllers\LocalMissionController;
@@ -21,7 +21,17 @@ use App\Http\Controllers\PrimeController;
 
 use App\Http\Controllers\Employee\FichePaieController;
 
+use App\Http\Controllers\Employee\StatusEmployeeController;
+use App\Http\Controllers\AbsenceController;
 
+
+
+
+
+
+
+
+Route::post('/employee/status/update', [StatusEmployeeController::class, 'updateStatus'])->name('update.status');
 
 Route::prefix('employee')->group(function () {
     Route::get('/dashboard', [EmployeeController::class,'index'])->middleware(['auth', 'verified'])->name('employee.dashboard');
@@ -116,8 +126,6 @@ Route::middleware('auth')->prefix('employee')->name('employee.')->group(function
 
 Route::middleware('auth')->prefix('fichepaie')->name('employee.')->group(function () {
     Route::get('/fichepaies', [FichePaieController::class, 'index'])->name('fichepaie.index');
-
     Route::get('/fichepaies/salary/{employeeId}', [FichePaieController::class, 'salary'])->name('fichepaie.salary');
-    Route::get('/fichepaies/download/{employeeId}', [FichePaieController::class, 'download'])
-    ->name('fichepaie.downloadSalary');
+  
 });

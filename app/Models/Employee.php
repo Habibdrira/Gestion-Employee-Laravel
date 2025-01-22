@@ -9,30 +9,29 @@ class Employee extends Model
 {
     use HasFactory;
 
-    // La table associée à ce modèle
     protected $table = 'employees';
-
-    // Clé primaire de la table
     protected $primaryKey = 'employee_id';
+    protected $fillable = ['user_id', 'address', 'city', 'position', 'salary', 'status'];
 
-    // Attributs assignables en masse
-    protected $fillable = ['user_id', 'address', 'city', 'position', 'salary'];
 
-    /**
-     * Relation avec le modèle User.
-     * Un employé appartient à un utilisateur.
-     */
-    public function user()
+
+    public function fichepaies()
     {
-        return $this->belongsTo(User::class, 'user_id', 'id');
+        return $this->hasMany(Employee::class, 'employee_id', 'employee_id');
+
     }
 
-    /**
-     * Relation avec Absences.
-     * Un employé peut avoir plusieurs absences.
-     */
-    public function absences()
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id'); // Relie `user_id` de `employees` à `id` de `users`
+    }
 
+    public function statusEmployee()
+    {
+        return $this->hasOne(StatusEmployee::class, 'employee_id', 'employee_id');
+    }
+
+    public function absences()
     {
         // Indiquez explicitement la clé étrangère et la clé primaire
         return $this->hasMany(Absence::class, 'employee_id', 'employee_id');
@@ -74,7 +73,9 @@ class Employee extends Model
     {
         return $this->hasMany(Performance::class, 'employee_id', 'employee_id');
     }
-    
+   
+
+
 
 }
 

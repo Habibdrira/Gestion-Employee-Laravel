@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Log;
 use App\Models\User;
 use App\Models\Employee;
 use App\Models\Absence;
+use Carbon\Carbon;
 
 use App\Models\Performance;
 
@@ -17,6 +18,8 @@ class EmployeeController extends Controller
     {
         $this->middleware('auth');
     }
+
+
     public function index()
     {
         // Vérifier si l'utilisateur est authentifié
@@ -32,9 +35,12 @@ class EmployeeController extends Controller
             $absences = Absence::where('employee_id', $employee->employee_id)->count();
 
             $notifications = auth()->user()->unreadNotifications;
+             
 
+            $weeklyPerformanceData = $this->getWeeklyPerformanceData();
+            $weeklyAbsenceData = $this->getWeeklyAbsenceData();
 
-return view('employee.dashboard', compact('notifications', 'primes', 'performances', 'absences'));
+return view('employee.dashboard', compact('notifications', 'primes', 'performances', 'absences','weeklyPerformanceData','weeklyAbsenceData'));
 
                 } else {
             // Si aucun employé n'est trouvé pour cet utilisateur
@@ -45,7 +51,58 @@ return view('employee.dashboard', compact('notifications', 'primes', 'performanc
         return redirect()->route('login')->with('error', 'Veuillez vous connecter.');
     }
     }
-
+    private function getWeeklyAbsenceData()
+    {
+        // Récupérer les absences de l'employé courant pour cette semaine
+        $absences = $this->getEmployeeAbsences();
+    
+        // Organiser les absences par jour de la semaine
+        $weeklyAbsenceData = $absences->groupBy(function($absence) {
+            return Carbon::parse($absence->date)->format('l'); // Récupère le jour de la semaine
+        });
+    
+        // Calculer la somme des durées d'absences par jour de la semaine
+        return $weeklyAbsenceData->map(function ($day) {
+            return $day->sum('duration'); // Somme des durées des absences pour chaque jour
+        });
+    }
+    
+    /**
+     * Récupérer les absences de l'employé courant pour cette semaine.
+     */
+    private function getEmployeeAbsences()
+    {
+        return Absence::where('employee_id', auth()->user()->employee->employee_id)
+            ->whereBetween('date', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+            ->get();
+    }
+    
+    private function getWeeklyPerformanceData()
+    {
+        // Récupérer les performances de l'employé courant pour cette semaine
+        $performances = $this->getEmployeePerformances();
+    
+        // Organiser les performances par jour de la semaine
+        $weeklyPerformanceData = $performances->groupBy(function($performance) {
+            return Carbon::parse($performance->date)->format('l'); // Récupère le jour de la semaine
+        });
+    
+        // Calculer la moyenne des performances par jour de la semaine
+        return $weeklyPerformanceData->map(function ($day) {
+            return $day->avg('rating'); // Moyenne des performances pour chaque jour
+        });
+    }
+    
+    /**
+     * Récupérer les performances de l'employé courant pour cette semaine.
+     */
+    private function getEmployeePerformances()
+    {
+        return Performance::where('employee_id', auth()->user()->employee->employee_id)
+            ->whereBetween('date', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])
+            ->get();
+    }
+    
     public function indexAdmin()
     {
         $employees = Employee::with('user')->get();

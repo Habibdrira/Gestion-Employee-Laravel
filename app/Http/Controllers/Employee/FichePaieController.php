@@ -30,35 +30,22 @@ class FichePaieController extends Controller
 }
     }
 
-    public function download($employeeId)
-    {
-        // Rechercher la fiche de paie associée à cet employé
-        $fichePaie = FichePaie::where('employee_id', $employeeId)->first();
-    
-        if (!$fichePaie) {
-            return redirect()->route('fichepaie.index')->with('error', 'Fiche de paie introuvable.');
-        }
-    
-        $filePath = storage_path('app/fichepaies/' . $fichePaie->filename);
-    
-        // Vérifier si le fichier existe
-        if (file_exists($filePath)) {
-            return response()->download($filePath);
-        }
-    
-        return redirect()->route('fichepaie.index')->with('error', 'Fichier introuvable.');
-    }
+ 
  
     
 
 
     public function index()
-{
-    // Si vous voulez que l'employé connecté voit ses propres fiches de paie
-    $employee = auth()->user()->employee;
-    $fichepaies = $employee ? $employee->fichepaies : [];
-
-    return view('employee.fichepaies.index', compact('fichepaies'));
-}
+    {
+        // Récupérer l'employé connecté
+        $employee = auth()->user()->employee;
+    
+        // Récupérer les fiches de paie de l'employé
+        $fichePaies = $employee ? $employee->fichepaies : [];
+    
+        // Passer les fiches de paie à la vue
+        return view('employee.fichepaies.index', compact('fichePaies'));
+    }
+    
 
 }

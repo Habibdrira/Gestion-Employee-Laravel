@@ -19,12 +19,7 @@
                     <td>{{ $fichePaie->id }}</td>
                     <td>{{ $fichePaie->date }}</td>
                     <td>{{ $fichePaie->montant }}</td>
-                    <td>
-                        <!-- Lien de téléchargement pour chaque fiche de paie -->
-                        <a href="{{ route('fichepaie.download', $fichePaie) }}" class="btn btn-success btn-sm">
-                            <x-coreui-icon class="nav-icon" icon="cil-cloud-download" /> Télécharger
-                        </a>
-                    </td>
+                    
                 </tr>
             @endforeach
         </tbody>
