@@ -5,11 +5,7 @@
 @section('content')
 <div class="container">
     <!-- Bouton de retour au Dashboard -->
-    <div class="d-flex justify-content-start mb-3">
-        <a href="{{ route('admin.dashboard') }}" class="text-decoration-underline text-dark">
-            ← Retour au Dashboard
-        </a>
-    </div>
+
 
     <h2 class="text-center mb-4 text-primary fw-bold">Analyse des Congés pour la Planification des Ressources</h2>
 

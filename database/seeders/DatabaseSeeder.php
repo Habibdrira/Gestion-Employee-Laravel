@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
         DemandeCongeSeeder::class,
         StatusEmployeeSeeder::class,
         WorkMinuteSeeder::class,
+        
     ]);
 
 

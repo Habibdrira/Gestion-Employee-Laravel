@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Loan;
+use App\Models\user;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -75,11 +76,20 @@ class LoanController extends Controller
      */
     public function approve(Loan $loan)
     {
+        // Check if the user exists (using the authenticated user)
+        $user = User::find(Auth::id());
+    
+        if (!$user) {
+            // Return an error if the user is not found
+            return redirect()->route('admin.loans.index')->with('error', 'Utilisateur non trouvé.');
+        }
+    
+        // Update the loan status and assign the user_id
         $loan->update([
             'status' => 'approved',
-            'admin_id' => Auth::id(),
+            'user_id' => Auth::id(),  // Use user_id instead of admin_id
         ]);
-
+    
         return redirect()->route('admin.loans.index')->with('success', 'Le prêt a été approuvé.');
     }
 

@@ -23,7 +23,7 @@ class AbsenceSeeder extends Seeder
         $currentDate = Carbon::now();
 
         // Pour insérer des absences pour les employés existants
-        for ($i = 2; $i <= 50; $i++) { // L'ID de l'employé est de 2 à 50
+        for ($i = 2; $i <= 10; $i++) { // L'ID de l'employé est de 2 à 50
             $employee = Employee::find($i); // Trouver un employé par ID
 
             if ($employee) {

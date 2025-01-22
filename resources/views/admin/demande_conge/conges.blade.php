@@ -2,11 +2,7 @@
 
 @section('content')
 <div class="container mt-5">
-    <div class="d-flex justify-content-start mb-3">
-        <a href="{{ route('admin.dashboard') }}" class="text-decoration-underline text-dark">
-            ← Retour au Dashboard
-        </a>
-    </div>
+
     <h2 class="text-center mb-4">Liste des Demandes de Congé</h2>
 
 

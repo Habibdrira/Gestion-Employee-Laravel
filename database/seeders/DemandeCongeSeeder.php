@@ -15,7 +15,7 @@ class DemandeCongeSeeder extends Seeder
 
         // Remplir la table demande_conges avec des données aléatoires
         // Vous pouvez choisir le nombre d'entrées que vous souhaitez insérer
-        for ($i = 2; $i <= 50; $i++) {
+        for ($i = 2; $i <= 10; $i++) {
             // Vérifiez si l'employé existe dans la table employees
             $employee = Employee::find($i);
 
