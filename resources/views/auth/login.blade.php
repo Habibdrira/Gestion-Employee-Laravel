@@ -87,14 +87,7 @@
                             </div>
                         </div>
                         <div class="card col-md-5 text-white bg-primary py-5">
-                            <img 
-                            src="{{ asset('assets/img/1.png') }}" 
-                            alt="Logo BD" 
-                            class="sidebar-brand-full" 
-                            width="400"  
-                            height="200"  
-                            style="object-fit: contain;"
-                        >                          
+                                                
                                
                             </div>
                         </div>

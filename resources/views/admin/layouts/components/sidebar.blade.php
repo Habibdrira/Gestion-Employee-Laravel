@@ -2,14 +2,7 @@
     <!-- Sidebar Brand Section -->
     <div class="sidebar-brand d-none d-md-flex">
         <!-- Ajout de l'image -->
-        <img 
-        src="{{ asset('assets/img/1.png') }}" 
-        alt="Logo BD" 
-        class="sidebar-brand-full" 
-        width="200" 
-        height="100" 
-        style="object-fit: contain;"
-    >
+   
     </div>
 
     <!-- Styles pour la sidebar -->
